@@ -13,6 +13,17 @@ Template:
 
 ---
 
+## 2026-05-17 — Android device-verified (core features working)
+
+**Done:** User installed build #5 on their Android phone and confirmed
+core functionality works end to end. The full v0.1–v0.8 roadmap is now
+device-verified for core flows.
+**Why:** Milestone — a working free Termius alternative.
+**Next:** Polish only. Open items: APK size slimming, biometric
+MainActivity patch, host-key TOFU wiring, deeper testing of
+SFTP/port-forwarding, optional i18n, iOS distribution path. Await user's
+priority.
+
 ## 2026-05-17 — CI GREEN for the full roadmap
 
 **Done:** Build #5 (commit 69ea883) passed both jobs — Android APK build

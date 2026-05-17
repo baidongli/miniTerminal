@@ -2,15 +2,16 @@
 
 _Last updated: 2026-05-17_
 
-## Status: v0.2–v0.8 CI-GREEN (Android + iOS compile); awaiting device test
+## Status: v0.2–v0.8 DEVICE-VERIFIED on Android (core features working)
 
-v0.1 verified on the user's Android phone. Full roadmap (keys,
-security/jump host, terminal theming, multi-session, SFTP, port
-forwarding, snippets, app lock, settings, import/export) implemented in
-one architecture pass. Build #5 (commit 69ea883) is GREEN for both the
-Android APK and the iOS compile check. APK published to the
-`android-latest` release. Functional device testing of the new features
-is the next step.
+User installed build #5 (commit 69ea883) on their Android phone and
+confirmed core functionality works. Full roadmap (keys, security/jump
+host, terminal theming, multi-session, SFTP, port forwarding, snippets,
+app lock, settings, import/export) is implemented, CI-green for Android
++ iOS compile, and the core flows are verified on a real device.
+
+Remaining work is polish and the known caveats below, not core
+functionality.
 
 ### Known runtime caveats (compile-safe, may need follow-up)
 - **Biometric app lock**: Android needs `MainActivity` to extend

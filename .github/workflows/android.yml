@@ -38,8 +38,11 @@ jobs:
             -e 's/io\.flutter\.embedding\.android\.FlutterActivity/io.flutter.embedding.android.FlutterFragmentActivity/' \
             -e 's/: *FlutterActivity()/: FlutterFragmentActivity()/' {} +
           MAN=android/app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.INTERNET' "$MAN" || sed -i \
+            's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$MAN"
           grep -q 'USE_BIOMETRIC' "$MAN" || sed -i \
             's#<application#<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application#' "$MAN"
+          echo "--- AndroidManifest.xml ---"; cat "$MAN"
 
       - name: Get dependencies
         run: flutter pub get

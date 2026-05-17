@@ -13,6 +13,17 @@ Template:
 
 ---
 
+## 2026-05-17 — Fix release regression: missing INTERNET permission
+
+**Done:** Device test of the slim release APK failed all connections
+with `OS Error: Operation not permitted, errno = 1`. Cause: Flutter
+only injects `android.permission.INTERNET` into the debug/profile
+manifests; the release main manifest lacks it. Workflow now patches
+INTERNET (and biometric) into the main AndroidManifest and prints it.
+**Why:** Regression from switching debug→release for APK slimming.
+**Files:** .github/workflows/android.yml
+**Next:** Rebuild; user reinstalls and retries the connection.
+
 ## 2026-05-17 — Polish pass GREEN; APK 157 MB → 20.7 MB
 
 **Done:** Build for commit a5f9be0 passed; release arm64 APK is

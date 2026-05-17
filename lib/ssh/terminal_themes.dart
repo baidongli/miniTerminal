@@ -3,7 +3,7 @@ import 'package:xterm/xterm.dart';
 
 import '../models/app_settings.dart';
 
-class TerminalThemes {
+class AppTerminalThemes {
   static TerminalTheme of(TerminalThemeId id) => switch (id) {
         TerminalThemeId.dark => _dark,
         TerminalThemeId.light => _light,

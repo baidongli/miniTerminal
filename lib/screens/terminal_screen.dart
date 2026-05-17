@@ -81,7 +81,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
     final themeId = repo.settings.terminalTheme;
 
     return Scaffold(
-      backgroundColor: TerminalThemes.background(themeId),
+      backgroundColor: AppTerminalThemes.background(themeId),
       appBar: AppBar(
         title: Text(session.host.displayName),
         actions: [
@@ -124,7 +124,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
               session.terminal,
               controller: _controller,
               autofocus: true,
-              theme: TerminalThemes.of(themeId),
+              theme: AppTerminalThemes.of(themeId),
               textStyle: TerminalStyle(fontSize: repo.settings.fontSize),
               backgroundOpacity: 1.0,
             ),

@@ -24,8 +24,8 @@ class KeyGen {
         Uint8List.fromList((await pair.extractPublicKey()).bytes);
 
     final pubBlob = _builder()
-      ..addAll(_sshString(ascii.encode('ssh-ed25519')))
-      ..addAll(_sshString(pub));
+      ..add(_sshString(ascii.encode('ssh-ed25519')))
+      ..add(_sshString(pub));
     final pubBlobBytes = pubBlob.toBytes();
 
     final publicLine =
@@ -38,24 +38,24 @@ class KeyGen {
 
     const checkint = 0x12345678;
     final unpadded = _builder()
-      ..addAll(_uint32(checkint))
-      ..addAll(_uint32(checkint))
-      ..addAll(_sshString(ascii.encode('ssh-ed25519')))
-      ..addAll(_sshString(pub))
-      ..addAll(_sshString(priv64))
-      ..addAll(_sshString(ascii.encode(comment)));
+      ..add(_uint32(checkint))
+      ..add(_uint32(checkint))
+      ..add(_sshString(ascii.encode('ssh-ed25519')))
+      ..add(_sshString(pub))
+      ..add(_sshString(priv64))
+      ..add(_sshString(ascii.encode(comment)));
     final privSection = unpadded.toBytes();
     final padded = _padTo8(privSection);
 
     final body = _builder()
-      ..addAll(ascii.encode('openssh-key-v1'))
-      ..add(0)
-      ..addAll(_sshString(ascii.encode('none'))) // ciphername
-      ..addAll(_sshString(ascii.encode('none'))) // kdfname
-      ..addAll(_sshString(Uint8List(0))) // kdfoptions
-      ..addAll(_uint32(1)) // number of keys
-      ..addAll(_sshString(pubBlobBytes)) // public key
-      ..addAll(_sshString(padded)); // private section
+      ..add(ascii.encode('openssh-key-v1'))
+      ..addByte(0)
+      ..add(_sshString(ascii.encode('none'))) // ciphername
+      ..add(_sshString(ascii.encode('none'))) // kdfname
+      ..add(_sshString(Uint8List(0))) // kdfoptions
+      ..add(_uint32(1)) // number of keys
+      ..add(_sshString(pubBlobBytes)) // public key
+      ..add(_sshString(padded)); // private section
 
     final b64 = base64.encode(body.toBytes());
     final wrapped = StringBuffer('-----BEGIN OPENSSH PRIVATE KEY-----\n');

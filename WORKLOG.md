@@ -13,6 +13,16 @@ Template:
 
 ---
 
+## 2026-05-17 — Fix #2: name clash + BytesBuilder API
+
+**Done:** CI compile of the big rebuild surfaced two errors: (1) my
+`TerminalThemes` clashed with xterm's own `TerminalThemes` → renamed to
+`AppTerminalThemes`; (2) `dart:typed_data` `BytesBuilder` has no
+`addAll` → switched to `add(List<int>)` / `addByte(int)` in key_gen.
+**Files:** lib/ssh/terminal_themes.dart, lib/screens/terminal_screen.dart,
+lib/ssh/key_gen.dart
+**Next:** Re-run CI; keep clearing compile errors until green.
+
 ## 2026-05-17 — v0.1 verified; v0.2–v0.8 implemented in one pass
 
 **Done:** User confirmed v0.1 works on their Android phone. Then did a

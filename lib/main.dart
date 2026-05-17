@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'l10n/app_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/lock_screen.dart';
 import 'ssh/session_manager.dart';
@@ -12,7 +14,11 @@ Future<void> main() async {
   final repo = AppRepository();
   await repo.init();
   final sessions = SessionManager(
-    connection: SshConnection(hostStore: repo.hosts, keyStore: repo.keys),
+    connection: SshConnection(
+      hostStore: repo.hosts,
+      keyStore: repo.keys,
+      knownHosts: repo.knownHosts,
+    ),
   );
   runApp(MiniTerminalApp(repo: repo, sessions: sessions));
 }
@@ -46,6 +52,13 @@ class MiniTerminalApp extends StatelessWidget {
             colorSchemeSeed: Colors.teal,
             brightness: Brightness.dark),
         themeMode: ThemeMode.system,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const _Gate(),
       ),
     );

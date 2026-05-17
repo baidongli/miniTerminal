@@ -13,6 +13,22 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
+### Polish pass (2026-05-17, pushed for CI)
+- **host-key TOFU**: wired into the dartssh2 handshake via
+  `onVerifyHostKey`; first sighting trusted+stored, later mismatch
+  rejected. Also passes `keepAliveInterval`.
+- **APK slimming**: CI now builds `--release --split-per-abi` and
+  publishes the arm64-v8a APK (~tens of MB vs 157 MB debug).
+  Release is debug-signed by the Flutter template, so users must
+  uninstall any prior debug build before installing (signature change;
+  local data is lost).
+- **Biometric**: workflow patches MainActivity →
+  `FlutterFragmentActivity` and adds `USE_BIOMETRIC`.
+- **Icon**: generated teal ">_" launcher icon via a stdlib PNG
+  encoder (`tool/make_icon.py`), wired with `flutter_launcher_icons`.
+- **i18n**: lightweight en/zh `AppLocalizations` + delegates; nav and
+  Hosts screen localized. Remaining screens still English (incremental).
+
 ### Known runtime caveats (compile-safe, may need follow-up)
 - **Biometric app lock**: Android needs `MainActivity` to extend
   `FlutterFragmentActivity` for `local_auth`. The default `flutter

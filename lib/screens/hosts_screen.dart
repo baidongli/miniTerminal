@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/host_group.dart';
 import '../models/ssh_host.dart';
 import '../ssh/session_manager.dart';
@@ -106,19 +107,20 @@ class _HostsScreenState extends State<HostsScreen> {
     }
     final groupNames = byGroup.keys.toList()..sort();
 
+    final l = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hosts'),
+        title: Text(l.t('hosts')),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Search hosts / tags',
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+                hintText: l.t('searchHosts'),
+                border: const OutlineInputBorder(),
               ),
               onChanged: (v) => setState(() => _query = v),
             ),
@@ -132,8 +134,7 @@ class _HostsScreenState extends State<HostsScreen> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : filtered.isEmpty
-              ? const Center(
-                  child: Text('No hosts. Tap + to add your first SSH host.'))
+              ? Center(child: Text(l.t('noHosts')))
               : ListView(
                   children: [
                     for (final g in groupNames) ...[

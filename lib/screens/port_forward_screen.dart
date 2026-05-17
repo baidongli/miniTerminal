@@ -37,8 +37,11 @@ class _PortForwardScreenState extends State<PortForwardScreen> {
   Future<void> _connect() async {
     final repo = context.read<AppRepository>();
     try {
-      final conn =
-          SshConnection(hostStore: repo.hosts, keyStore: repo.keys);
+      final conn = SshConnection(
+        hostStore: repo.hosts,
+        keyStore: repo.keys,
+        knownHosts: repo.knownHosts,
+      );
       final hosts = await repo.hosts.loadHosts();
       final dialed = await conn.connect(widget.host, allHosts: hosts);
       _dialed = dialed;

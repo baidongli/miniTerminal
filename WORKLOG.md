@@ -13,6 +13,29 @@ Template:
 
 ---
 
+## 2026-05-17 — Polish pass: host-key, APK slim, biometric, icon, i18n
+
+**Done:** All four user-selected polish items in one pass:
+- host-key TOFU wired via `onVerifyHostKey` (verified the dartssh2 API
+  by fetching pub.dev docs first); + `keepAliveInterval`. New
+  `knownHosts` dep threaded into SshConnection + 3 call sites.
+- CI builds `--release --split-per-abi`, publishes arm64-v8a APK
+  (Flutter template debug-signs release, so installable; users must
+  uninstall old debug build first).
+- Workflow patches MainActivity → FlutterFragmentActivity + adds
+  USE_BIOMETRIC for local_auth.
+- Generated launcher icon with a pure-stdlib PNG encoder
+  (tool/make_icon.py, no PIL available) + flutter_launcher_icons.
+- Lightweight en/zh AppLocalizations + Flutter global delegates; nav +
+  Hosts localized; other screens English pending incremental work.
+**Why:** User selected all four polish items.
+**Files:** ssh_connection.dart, main.dart, sftp_screen.dart,
+port_forward_screen.dart, home_screen.dart, hosts_screen.dart,
+l10n/app_localizations.dart, pubspec.yaml, .github/workflows/android.yml,
+tool/make_icon.py, assets/icon/icon.png
+**Next:** CI green check; verify icon shows, zh locale, biometric on
+device, smaller APK installs after uninstalling old build.
+
 ## 2026-05-17 — Android device-verified (core features working)
 
 **Done:** User installed build #5 on their Android phone and confirmed

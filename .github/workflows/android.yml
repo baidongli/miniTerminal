@@ -32,16 +32,29 @@ jobs:
       - name: Generate Android/iOS platform scaffolding
         run: flutter create --platforms=android,ios --project-name miniterminal .
 
+      - name: Enable biometric (FlutterFragmentActivity for local_auth)
+        run: |
+          find android/app/src/main -name 'MainActivity.kt' -print -exec sed -i \
+            -e 's/io\.flutter\.embedding\.android\.FlutterActivity/io.flutter.embedding.android.FlutterFragmentActivity/' \
+            -e 's/: *FlutterActivity()/: FlutterFragmentActivity()/' {} +
+          MAN=android/app/src/main/AndroidManifest.xml
+          grep -q 'USE_BIOMETRIC' "$MAN" || sed -i \
+            's#<application#<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application#' "$MAN"
+
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build debug APK (installable, self-signed)
-        run: flutter build apk --debug
+      - name: Generate launcher icons
+        run: dart run flutter_launcher_icons
+
+      - name: Build release APK (split per ABI, debug-signed)
+        run: flutter build apk --release --split-per-abi
 
       - name: Rename APK
         run: |
           mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-debug.apk dist/miniterminal.apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+             dist/miniterminal.apk
 
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v4
@@ -56,11 +69,14 @@ jobs:
           tag_name: android-latest
           name: MiniTerminal — latest Android build
           body: |
-            Auto-built debug APK from branch `claude/ssh-terminal-app-TGYBf`.
-            Commit: ${{ github.sha }}
+            Auto-built **release** APK (arm64-v8a) from branch
+            `claude/ssh-terminal-app-TGYBf`. Commit: ${{ github.sha }}
 
-            On your Android phone: download `miniterminal.apk` below, then
-            allow "install unknown apps" for your browser when prompted.
+            Smaller & faster than debug. Works on virtually all modern
+            phones (arm64). On your Android phone: download
+            `miniterminal.apk` below, then allow "install unknown apps"
+            for your browser when prompted. If you previously installed a
+            debug build, uninstall it first (different signature).
           files: dist/miniterminal.apk
           prerelease: true
         env:

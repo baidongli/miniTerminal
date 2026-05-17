@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../ssh/session_manager.dart';
 import 'hosts_screen.dart';
 import 'keys_screen.dart';
@@ -29,28 +30,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final sessionCount = context.watch<SessionManager>().sessions.length;
+    final l = AppLocalizations.of(context);
     return Scaffold(
       body: IndexedStack(index: _index, children: _pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
         destinations: [
-          const NavigationDestination(
-              icon: Icon(Icons.dns), label: 'Hosts'),
+          NavigationDestination(
+              icon: const Icon(Icons.dns), label: l.t('hosts')),
           NavigationDestination(
             icon: Badge(
               isLabelVisible: sessionCount > 0,
               label: Text('$sessionCount'),
               child: const Icon(Icons.terminal),
             ),
-            label: 'Sessions',
+            label: l.t('sessions'),
           ),
-          const NavigationDestination(
-              icon: Icon(Icons.vpn_key), label: 'Keys'),
-          const NavigationDestination(
-              icon: Icon(Icons.bolt), label: 'Snippets'),
-          const NavigationDestination(
-              icon: Icon(Icons.settings), label: 'Settings'),
+          NavigationDestination(
+              icon: const Icon(Icons.vpn_key), label: l.t('keys')),
+          NavigationDestination(
+              icon: const Icon(Icons.bolt), label: l.t('snippets')),
+          NavigationDestination(
+              icon: const Icon(Icons.settings), label: l.t('settings')),
         ],
       ),
     );

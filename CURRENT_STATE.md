@@ -13,7 +13,8 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
-### Polish pass (2026-05-17, pushed for CI)
+### Polish pass (2026-05-17, CI-GREEN, build a5f9be0)
+- APK now **20.7 MB** (was 157 MB debug) — release/arm64 split.
 - **host-key TOFU**: wired into the dartssh2 handshake via
   `onVerifyHostKey`; first sighting trusted+stored, later mismatch
   rejected. Also passes `keepAliveInterval`.

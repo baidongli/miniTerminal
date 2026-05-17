@@ -13,6 +13,14 @@ Template:
 
 ---
 
+## 2026-05-17 — Polish pass GREEN; APK 157 MB → 20.7 MB
+
+**Done:** Build for commit a5f9be0 passed; release arm64 APK is
+20.7 MB (was 157 MB), published to `android-latest`. host-key TOFU,
+biometric patch, icon, and i18n shipped.
+**Next:** User uninstalls old build, installs the slim APK, verifies
+icon / zh locale / biometric unlock / host-key trust on device.
+
 ## 2026-05-17 — Polish pass: host-key, APK slim, biometric, icon, i18n
 
 **Done:** All four user-selected polish items in one pass:

@@ -13,7 +13,9 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done ·
 - [x] SSH connect + interactive terminal (dartssh2 + xterm)
 - [x] Extra-key toolbar
 - [x] Project docs (CLAUDE/CURRENT_STATE/TASKS/WORKLOG)
-- [!] Build & run on a real device — needs user (no toolchain in cloud)
+- [x] GitHub Actions: cloud APK build + rolling release (no computer needed)
+- [~] First real build green on CI (triggered, awaiting result)
+- [ ] User installs APK on Android phone, reports issues
 - [ ] Fix issues found in first real build
 
 ## v0.2 — SSH key management

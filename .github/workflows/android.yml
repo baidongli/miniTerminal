@@ -1,0 +1,90 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - claude/ssh-terminal-app-TGYBf
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android/iOS platform scaffolding
+        run: flutter create --platforms=android,ios --project-name miniterminal .
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build debug APK (installable, self-signed)
+        run: flutter build apk --debug
+
+      - name: Rename APK
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-debug.apk dist/miniterminal.apk
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: miniterminal-apk
+          path: dist/miniterminal.apk
+          if-no-files-found: error
+
+      - name: Publish APK to a rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-latest
+          name: MiniTerminal — latest Android build
+          body: |
+            Auto-built debug APK from branch `claude/ssh-terminal-app-TGYBf`.
+            Commit: ${{ github.sha }}
+
+            On your Android phone: download `miniterminal.apk` below, then
+            allow "install unknown apps" for your browser when prompted.
+          files: dist/miniterminal.apk
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ios-compile-check:
+    name: iOS compile check (no signing)
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate platform scaffolding
+        run: flutter create --platforms=android,ios --project-name miniterminal .
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --no-codesign --debug

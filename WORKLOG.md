@@ -13,6 +13,24 @@ Template:
 
 ---
 
+## 2026-05-17 — Cloud build via GitHub Actions (no computer needed)
+
+**Done:** Added `.github/workflows/android.yml`: on push to the branch
+it generates platform scaffolding, builds a debug APK, uploads it as an
+artifact, and publishes it to a rolling pre-release tagged
+`android-latest`. Added a non-blocking macOS job that compile-checks iOS
+(`flutter build ios --no-codesign`). Documented the phone-only install
+path in README.
+**Why:** User has no computer/Flutter, only an Android phone. iOS device
+install has no free computer-less path (signing constraint); Android APK
+sideload is fully free. Debug APK is self-signed so it installs without
+any keystore setup.
+**Files:** .github/workflows/android.yml, README.md, CURRENT_STATE.md,
+TASKS.md
+**Next:** Confirm the first Actions run is green and the
+`android-latest` release has `miniterminal.apk`; user installs and
+reports runtime issues.
+
 ## 2026-05-17 — Project docs added
 
 **Done:** Created project documentation: `CLAUDE.md` (session entry

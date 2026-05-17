@@ -2,7 +2,7 @@
 
 _Last updated: 2026-05-17_
 
-## Status: v0.1 implemented, not yet built/tested on a device
+## Status: v0.1 implemented; cloud CI added; awaiting first APK build
 
 The full Dart codebase for v0.1 is written, committed, and pushed to
 `claude/ssh-terminal-app-TGYBf`. It has **not** been compiled or run yet
@@ -29,10 +29,20 @@ The full Dart codebase for v0.1 is written, committed, and pushed to
 - No automated tests.
 - No host-key verification / known_hosts handling (accepts any host key).
 
+## Build path (decided)
+
+User has **no computer / no Flutter / Android phone available**. Build
+happens in **GitHub Actions** (`.github/workflows/android.yml`): every
+push to the branch builds a debug APK and publishes it to the rolling
+pre-release `android-latest`; user installs the APK directly on the
+Android phone. A non-blocking macOS job also compile-checks iOS.
+
 ## Immediate next steps (for whoever picks this up)
 
-1. User: build locally (`flutter create ... .`, `flutter pub get`,
-   `flutter run`) and report any compile/runtime errors.
-2. Fix any API mismatches surfaced by the first real build.
+1. Wait for the Actions run on the latest push; check the `android-latest`
+   release has `miniterminal.apk`.
+2. User installs the APK on the Android phone and reports any
+   build/runtime errors (this is the first real compile — expect possible
+   `dartssh2`/`xterm` API or dependency-version fixes).
 3. Then proceed with the TASKS.md roadmap (key auth is the likely next
    feature).

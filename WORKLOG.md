@@ -13,6 +13,20 @@ Template:
 
 ---
 
+## 2026-05-17 — CI GREEN for the full roadmap
+
+**Done:** Build #5 (commit 69ea883) passed both jobs — Android APK build
+and iOS compile check. The entire v0.1–v0.8 codebase now compiles for
+Android and iOS. APK auto-published to the `android-latest` release
+(~157 MB; debug build with all ABIs — slimming is tracked in
+engineering debt).
+**Why:** Two compile-fix rounds (const ctor; name clash + BytesBuilder)
+were enough; the rest of the large rebuild compiled clean.
+**Next:** User installs the new APK and functionally tests each feature
+area (keys, jump host, themes, multi-session, SFTP, forwarding,
+snippets, app lock). Watch the known caveats: biometric MainActivity,
+host-key TOFU not wired, unverified-at-runtime dartssh2 SFTP/forward.
+
 ## 2026-05-17 — Fix #2: name clash + BytesBuilder API
 
 **Done:** CI compile of the big rebuild surfaced two errors: (1) my

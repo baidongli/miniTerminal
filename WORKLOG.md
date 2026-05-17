@@ -13,6 +13,18 @@ Template:
 
 ---
 
+## 2026-05-17 — Full feature development list
+
+**Done:** Expanded TASKS.md from a skeleton into a complete, prioritized
+feature roadmap (v0.1–v0.8 + backlog + engineering debt), each block
+with an acceptance criterion. Covers key auth, host-key verification,
+jump host, terminal theming, multi-session, SFTP, port forwarding,
+snippets, app lock, i18n, etc.
+**Why:** User asked for a proper feature list to drive development while
+the first build runs.
+**Files:** TASKS.md
+**Next:** Confirm v0.1 build is green, then start v0.2 (SSH key auth).
+
 ## 2026-05-17 — Fix first build failure (const constructor)
 
 **Done:** First CI build failed at `assembleDebug` with a Dart compile

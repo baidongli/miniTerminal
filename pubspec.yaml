@@ -1,7 +1,7 @@
 name: miniterminal
 description: A lightweight SSH terminal client for iOS/Android (a free Termius alternative).
 publish_to: "none"
-version: 0.1.0+1
+version: 0.8.0+8
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -15,6 +15,11 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_secure_storage: ^9.2.2
   uuid: ^4.4.0
+  provider: ^6.1.2
+  file_picker: ^8.0.6
+  path_provider: ^2.1.3
+  local_auth: ^2.2.0
+  cryptography: ^2.7.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0

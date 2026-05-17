@@ -2,7 +2,25 @@
 
 _Last updated: 2026-05-17_
 
-## Status: v0.1 implemented; cloud CI added; awaiting first APK build
+## Status: v0.1 verified on device; v0.2–v0.8 implemented in one pass,
+awaiting CI compile
+
+v0.1 confirmed working on the user's Android phone. The full roadmap
+(keys, security/jump host, terminal theming, multi-session, SFTP, port
+forwarding, snippets, app lock, settings, import/export) was then
+implemented in a single architecture pass and pushed for CI to compile.
+Not yet verified on device beyond v0.1.
+
+### Known runtime caveats (compile-safe, may need follow-up)
+- **Biometric app lock**: Android needs `MainActivity` to extend
+  `FlutterFragmentActivity` for `local_auth`. The default `flutter
+  create` MainActivity is `FlutterActivity`; biometric prompt may fail
+  at runtime until that's patched (CI build still succeeds).
+- **Host-key verification**: store + known-hosts manager UI exist, but
+  live TOFU verification is NOT wired into the dartssh2 handshake yet
+  (API uncertainty without a compiler). Tracked in TASKS v0.3.
+- Several dartssh2/SFTP/remote-forward APIs written to spec, unverified
+  on a real build.
 
 The full Dart codebase for v0.1 is written, committed, and pushed to
 `claude/ssh-terminal-app-TGYBf`. It has **not** been compiled or run yet

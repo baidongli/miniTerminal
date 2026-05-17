@@ -7,6 +7,12 @@ future session knows when it's "done".
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done ·
 `[!]` blocked/needs user
 
+> **2026-05-17 implementation pass:** v0.1 verified on device. v0.2–v0.8
+> implemented in code in one architecture rebuild and pushed for CI
+> compile. Items below marked `[x]` are code-complete but only
+> device-verified for v0.1; `[~]`/`[ ]` note known gaps (host-key TOFU
+> wiring, biometric MainActivity, dynamic SOCKS, i18n, app assets).
+
 ---
 
 ## v0.1 — Host management + SSH connection (MVP) — IN PROGRESS

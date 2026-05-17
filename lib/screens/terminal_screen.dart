@@ -1,161 +1,143 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:xterm/xterm.dart';
 
-import '../models/ssh_host.dart';
-import '../services/host_store.dart';
-
-enum _ConnState { connecting, connected, error }
+import '../models/snippet.dart';
+import '../ssh/session_manager.dart';
+import '../ssh/terminal_themes.dart';
+import '../state/app_repository.dart';
+import 'port_forward_screen.dart';
+import 'sftp_screen.dart';
 
 class TerminalScreen extends StatefulWidget {
-  const TerminalScreen({super.key, required this.host, required this.store});
+  const TerminalScreen({super.key, required this.sessionId});
 
-  final SshHost host;
-  final HostStore store;
+  final String sessionId;
 
   @override
   State<TerminalScreen> createState() => _TerminalScreenState();
 }
 
 class _TerminalScreenState extends State<TerminalScreen> {
-  final Terminal _terminal = Terminal(maxLines: 10000);
-  final TerminalController _terminalController = TerminalController();
-
-  SSHClient? _client;
-  SSHSession? _session;
-
-  _ConnState _state = _ConnState.connecting;
-  String _errorMessage = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _connect();
-  }
-
-  Future<void> _connect() async {
-    setState(() {
-      _state = _ConnState.connecting;
-      _errorMessage = '';
-    });
-    _terminal.write('Connecting to ${widget.host.host}:${widget.host.port}...\r\n');
-
-    try {
-      final password = await widget.store.readPassword(widget.host.id);
-      if (password == null || password.isEmpty) {
-        throw SSHAuthAbortError('No saved password for this host.');
-      }
-
-      final socket = await SSHSocket.connect(
-        widget.host.host,
-        widget.host.port,
-        timeout: const Duration(seconds: 15),
-      );
-
-      final client = SSHClient(
-        socket,
-        username: widget.host.username,
-        onPasswordRequest: () => password,
-      );
-      _client = client;
-
-      final session = await client.shell(
-        pty: SSHPtyConfig(
-          width: _terminal.viewWidth > 0 ? _terminal.viewWidth : 80,
-          height: _terminal.viewHeight > 0 ? _terminal.viewHeight : 25,
-        ),
-      );
-      _session = session;
-
-      _terminal.onOutput = (data) {
-        session.write(utf8.encode(data));
-      };
-      _terminal.onResize = (w, h, pw, ph) {
-        session.resizeTerminal(w, h, pw, ph);
-      };
-
-      session.stdout
-          .cast<List<int>>()
-          .transform(const Utf8Decoder(allowMalformed: true))
-          .listen(_terminal.write);
-      session.stderr
-          .cast<List<int>>()
-          .transform(const Utf8Decoder(allowMalformed: true))
-          .listen(_terminal.write);
-
-      unawaited(session.done.then((_) {
-        if (!mounted) return;
-        _terminal.write('\r\n*** Session closed ***\r\n');
-      }));
-
-      if (!mounted) return;
-      setState(() => _state = _ConnState.connected);
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _state = _ConnState.error;
-        _errorMessage = e.toString();
-      });
-      _terminal.write('\r\nConnection failed: $e\r\n');
-    }
-  }
-
-  void _disconnect() {
-    _session?.close();
-    _client?.close();
-    _session = null;
-    _client = null;
-  }
+  final TerminalController _controller = TerminalController();
 
   @override
   void dispose() {
-    _disconnect();
-    _terminalController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  void _sendKey(String data) {
-    _session?.write(utf8.encode(data));
+  TerminalSession? _session(SessionManager m) {
+    final list = m.sessions.where((s) => s.id == widget.sessionId);
+    return list.isEmpty ? null : list.first;
+  }
+
+  Future<void> _pickSnippet(TerminalSession session) async {
+    final repo = context.read<AppRepository>();
+    final snippets = await repo.snippets.load();
+    if (!mounted) return;
+    if (snippets.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No snippets yet. Add some in the Snippets tab.')),
+      );
+      return;
+    }
+    final chosen = await showModalBottomSheet<Snippet>(
+      context: context,
+      builder: (_) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: snippets
+              .map((s) => ListTile(
+                    title: Text(s.name),
+                    subtitle: Text(
+                      s.command,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () => Navigator.pop(context, s),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+    if (chosen != null) session.runCommand(chosen.command);
   }
 
   @override
   Widget build(BuildContext context) {
+    final manager = context.watch<SessionManager>();
+    final repo = context.watch<AppRepository>();
+    final session = _session(manager);
+
+    if (session == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: Text('Session closed.')),
+      );
+    }
+
+    final themeId = repo.settings.terminalTheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: TerminalThemes.background(themeId),
       appBar: AppBar(
-        title: Text(widget.host.displayName),
+        title: Text(session.host.displayName),
         actions: [
-          if (_state == _ConnState.error)
-            IconButton(
-              tooltip: 'Reconnect',
-              icon: const Icon(Icons.refresh),
-              onPressed: _connect,
-            ),
+          IconButton(
+            tooltip: 'Snippets',
+            icon: const Icon(Icons.bolt),
+            onPressed: session.isLive ? () => _pickSnippet(session) : null,
+          ),
+          PopupMenuButton<String>(
+            onSelected: (v) async {
+              if (v == 'reconnect') {
+                final hosts = await repo.hosts.loadHosts();
+                manager.reconnect(session, hosts);
+              } else if (v == 'sftp') {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => SftpScreen(host: session.host),
+                ));
+              } else if (v == 'forward') {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => PortForwardScreen(host: session.host),
+                ));
+              } else if (v == 'close') {
+                manager.close(session.id);
+                if (mounted) Navigator.of(context).pop();
+              }
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'reconnect', child: Text('Reconnect')),
+              PopupMenuItem(value: 'sftp', child: Text('SFTP files')),
+              PopupMenuItem(value: 'forward', child: Text('Port forwarding')),
+              PopupMenuItem(value: 'close', child: Text('Close session')),
+            ],
+          ),
         ],
       ),
       body: Column(
         children: [
           Expanded(
             child: TerminalView(
-              _terminal,
-              controller: _terminalController,
+              session.terminal,
+              controller: _controller,
               autofocus: true,
+              theme: TerminalThemes.of(themeId),
+              textStyle: TerminalStyle(fontSize: repo.settings.fontSize),
               backgroundOpacity: 1.0,
             ),
           ),
-          if (_state == _ConnState.connected) _KeyToolbar(onKey: _sendKey),
-          if (_state == _ConnState.error)
+          if (session.status == SessionStatus.connected)
+            _KeyToolbar(onKey: session.writeUser),
+          if (session.status == SessionStatus.error)
             Container(
               width: double.infinity,
               color: Colors.red.shade900,
               padding: const EdgeInsets.all(12),
-              child: Text(
-                _errorMessage,
-                style: const TextStyle(color: Colors.white),
-              ),
+              child: Text(session.errorMessage,
+                  style: const TextStyle(color: Colors.white)),
             ),
         ],
       ),
@@ -163,7 +145,6 @@ class _TerminalScreenState extends State<TerminalScreen> {
   }
 }
 
-/// A compact row of keys that a soft keyboard typically lacks.
 class _KeyToolbar extends StatelessWidget {
   const _KeyToolbar({required this.onKey});
 
@@ -180,25 +161,28 @@ class _KeyToolbar extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            _key('ESC', '\x1b'),
-            _key('TAB', '\t'),
-            _key('CTRL+C', '\x03'),
-            _key('CTRL+D', '\x04'),
-            _key('CTRL+L', '\x0c'),
-            _key('CTRL+Z', '\x1a'),
-            _key('↑', '\x1b[A'),
-            _key('↓', '\x1b[B'),
-            _key('←', '\x1b[D'),
-            _key('→', '\x1b[C'),
-            _key('HOME', '\x1b[H'),
-            _key('END', '\x1b[F'),
+            _k('ESC', '\x1b'),
+            _k('TAB', '\t'),
+            _k('CTRL+C', '\x03'),
+            _k('CTRL+D', '\x04'),
+            _k('CTRL+L', '\x0c'),
+            _k('CTRL+Z', '\x1a'),
+            _k('↑', '\x1b[A'),
+            _k('↓', '\x1b[B'),
+            _k('←', '\x1b[D'),
+            _k('→', '\x1b[C'),
+            _k('HOME', '\x1b[H'),
+            _k('END', '\x1b[F'),
+            _k('|', '|'),
+            _k('~', '~'),
+            _k('/', '/'),
           ],
         ),
       ),
     );
   }
 
-  Widget _key(String label, String data) {
+  Widget _k(String label, String data) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
       child: TextButton(
@@ -208,10 +192,12 @@ class _KeyToolbar extends StatelessWidget {
           minimumSize: const Size(0, 32),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
+              borderRadius: BorderRadius.circular(6)),
         ),
-        onPressed: () => onKey(data),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          onKey(data);
+        },
         child: Text(label, style: const TextStyle(fontSize: 13)),
       ),
     );

@@ -13,6 +13,34 @@ Template:
 
 ---
 
+## 2026-05-17 — v0.1 verified; v0.2–v0.8 implemented in one pass
+
+**Done:** User confirmed v0.1 works on their Android phone. Then did a
+full architecture rebuild and implemented the rest of the roadmap in one
+go (committed for CI to compile-check):
+- Models: extended SshHost (auth/key/group/jump/startup/tags), SshKey,
+  HostGroup, Snippet, AppSettings.
+- Stores: key/group/snippet/settings/known-hosts + JsonPrefs helper.
+- SSH layer: SshConnection (password+key auth, jump host), key_gen
+  (ed25519 → OpenSSH), SessionManager (multi-session), port_forwarding
+  (local+remote), terminal_themes (4 themes).
+- State: AppRepository + provider; AppLock (local_auth).
+- Screens: home (bottom nav + session badge), hosts (search/groups),
+  host_edit (auth/key/group/jump/startup/tags), terminal
+  (theme/snippets/SFTP/forward menu), keys (gen/import/paste),
+  groups, snippets, sessions, sftp, port_forward, settings
+  (theme/font/scrollback/app-lock/import-export), known_hosts, lock.
+- Deps added: provider, file_picker, path_provider, local_auth,
+  cryptography.
+**Why:** User asked to complete the whole roadmap without stopping.
+Done as one coherent architecture change; per-version commits were not
+possible because the rewrite is cross-cutting (shared models/state).
+**Caveats:** see CURRENT_STATE — biometric MainActivity, host-key TOFU
+not wired into handshake, unverified dartssh2/SFTP APIs.
+**Files:** ~30 files under lib/, pubspec.yaml
+**Next:** Get CI green; fix any API mismatches from the first compile of
+the new code.
+
 ## 2026-05-17 — Full feature development list
 
 **Done:** Expanded TASKS.md from a skeleton into a complete, prioritized

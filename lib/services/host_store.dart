@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/ssh_host.dart';
+import 'json_prefs.dart';
 
-/// Persists host metadata in [SharedPreferences] and the per-host password in
-/// the platform secure storage (iOS Keychain / Android Keystore).
+/// Persists host metadata in [SharedPreferences] and the per-host password
+/// in the platform secure storage (iOS Keychain / Android Keystore).
 class HostStore {
   HostStore({FlutterSecureStorage? secureStorage})
       : _secure = secureStorage ?? const FlutterSecureStorage();
@@ -17,20 +15,12 @@ class HostStore {
   final FlutterSecureStorage _secure;
 
   Future<List<SshHost>> loadHosts() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_hostsKey);
-    if (raw == null || raw.isEmpty) return [];
-    final list = jsonDecode(raw) as List<dynamic>;
-    return list
-        .map((e) => SshHost.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final list = await JsonPrefs.readList(_hostsKey);
+    return list.map(SshHost.fromJson).toList();
   }
 
-  Future<void> _persist(List<SshHost> hosts) async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = jsonEncode(hosts.map((h) => h.toJson()).toList());
-    await prefs.setString(_hostsKey, raw);
-  }
+  Future<void> _persist(List<SshHost> hosts) =>
+      JsonPrefs.writeList(_hostsKey, hosts.map((h) => h.toJson()).toList());
 
   Future<List<SshHost>> upsert(SshHost host, {String? password}) async {
     final hosts = await loadHosts();

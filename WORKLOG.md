@@ -13,6 +13,18 @@ Template:
 
 ---
 
+## 2026-05-17 — Fix first build failure (const constructor)
+
+**Done:** First CI build failed at `assembleDebug` with a Dart compile
+error: `throw const SSHAuthAbortError(...)` — `SSHAuthAbortError` is not
+a const constructor. Removed `const`.
+**Why:** Code had never been compiled; this is exactly the kind of API
+detail the first real build surfaces. Toolchain/CI itself works
+(`flutter create` + `pub get` passed).
+**Files:** lib/screens/terminal_screen.dart
+**Next:** Re-triggered build on push; verify it goes green and the APK
+appears in the `android-latest` release.
+
 ## 2026-05-17 — Cloud build via GitHub Actions (no computer needed)
 
 **Done:** Added `.github/workflows/android.yml`: on push to the branch

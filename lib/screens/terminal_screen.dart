@@ -46,7 +46,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
     try {
       final password = await widget.store.readPassword(widget.host.id);
       if (password == null || password.isEmpty) {
-        throw const SSHAuthAbortError('No saved password for this host.');
+        throw SSHAuthAbortError('No saved password for this host.');
       }
 
       final socket = await SSHSocket.connect(

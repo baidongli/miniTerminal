@@ -126,6 +126,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
               autofocus: true,
               theme: AppTerminalThemes.of(themeId),
               textStyle: TerminalStyle(fontSize: repo.settings.fontSize),
+              padding: EdgeInsets.zero,
               backgroundOpacity: 1.0,
             ),
           ),

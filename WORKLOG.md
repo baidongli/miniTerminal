@@ -13,6 +13,14 @@ Template:
 
 ---
 
+## 2026-05-17 — Connection works; reclaim terminal width
+
+**Done:** INTERNET fix confirmed — SSH connects and runs commands on
+device. User reported wasted left/edge space; set `TerminalView.padding`
+to `EdgeInsets.zero` so columns use the full width.
+**Files:** lib/screens/terminal_screen.dart
+**Next:** User rebuilds, checks the terminal now uses full width.
+
 ## 2026-05-17 — Fix release regression: missing INTERNET permission
 
 **Done:** Device test of the slim release APK failed all connections

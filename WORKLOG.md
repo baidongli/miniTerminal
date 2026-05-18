@@ -13,6 +13,16 @@ Template:
 
 ---
 
+## 2026-05-17 — Add reusable DEVELOPMENT_PLAYBOOK.md
+
+**Done:** Distilled the working practices from this project into an
+app-agnostic playbook (startup decisions, doc system, CI-as-compiler,
+small commits, API verification, debug/release pitfalls, branch
+strategy, honesty rules). Linked from CLAUDE.md.
+**Why:** User wants a reusable spec for future apps.
+**Files:** DEVELOPMENT_PLAYBOOK.md, CLAUDE.md
+**Next:** Apply it on this and future projects.
+
 ## 2026-05-17 — Merge feature branch into main
 
 **Done:** Per user request, merged `claude/ssh-terminal-app-TGYBf`

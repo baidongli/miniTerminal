@@ -17,6 +17,8 @@ alternative to Termius. Built with **Flutter** (pure-Dart SSH via
 3. **WORKLOG.md** — append-only chronological log. Every session that
    produces a meaningful change appends an entry here.
 4. **README.md** — user-facing build & run instructions.
+5. **DEVELOPMENT_PLAYBOOK.md** — reusable, app-agnostic engineering
+   rules distilled from this project. Follow it here and on future apps.
 
 ## Working agreement
 

@@ -3,7 +3,7 @@ name: Build APK
 on:
   push:
     branches:
-      - claude/ssh-terminal-app-TGYBf
+      - main
   workflow_dispatch:
 
 permissions:
@@ -72,8 +72,8 @@ jobs:
           tag_name: android-latest
           name: MiniTerminal — latest Android build
           body: |
-            Auto-built **release** APK (arm64-v8a) from branch
-            `claude/ssh-terminal-app-TGYBf`. Commit: ${{ github.sha }}
+            Auto-built **release** APK (arm64-v8a) from `main`.
+            Commit: ${{ github.sha }}
 
             Smaller & faster than debug. Works on virtually all modern
             phones (arm64). On your Android phone: download

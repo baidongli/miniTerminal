@@ -20,8 +20,9 @@ alternative to Termius. Built with **Flutter** (pure-Dart SSH via
 
 ## Working agreement
 
-- Develop on branch `claude/ssh-terminal-app-TGYBf`. Commit + push when a
-  stage is complete.
+- Develop on `main` (the feature branch was merged into main on
+  2026-05-17; all future work goes directly to `main`). Commit + push
+  when a stage is complete. CI builds the APK on every push to `main`.
 - The remote execution environment has **no Flutter/Dart toolchain**, so
   code cannot be compiled or run here. Write correct code; the user builds
   locally on a Mac for iOS.

@@ -13,6 +13,15 @@ Template:
 
 ---
 
+## 2026-05-17 — Merge feature branch into main
+
+**Done:** Per user request, merged `claude/ssh-terminal-app-TGYBf`
+(14 commits, fast-forward, no conflicts) into `main`; all future work
+on `main`. CI trigger switched from the feature branch to `main`;
+CLAUDE.md updated.
+**Files:** .github/workflows/android.yml, CLAUDE.md
+**Next:** Develop directly on `main` going forward.
+
 ## 2026-05-17 — Compact-prompt toggle
 
 **Done:** Root cause of "no room to type" was the server's long PS1

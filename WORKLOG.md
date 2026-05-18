@@ -31,6 +31,19 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Split playbook: generic vs Flutter-specific
+
+**Done:** Rewrote `DEVELOPMENT_PLAYBOOK.md` to be fully
+stack-agnostic (added an "applicability assumptions" table; section 7
+now generic principles; added a reuse checklist). Extracted all
+Flutter/Android/iOS specifics into new `STACK_NOTES_FLUTTER.md`
+(scaffolding, debug/release, size, store, native plugin config, Dart
+API gotchas, mobile UX, CI shape). Linked both from CLAUDE.md.
+**Why:** User wants the playbook reusable for non-Flutter apps too.
+**Files:** DEVELOPMENT_PLAYBOOK.md, STACK_NOTES_FLUTTER.md, CLAUDE.md
+**Next:** Reuse the generic playbook on future apps; keep STACK_NOTES
+per stack.
+
 ## 2026-05-17 — Add reusable DEVELOPMENT_PLAYBOOK.md
 
 **Done:** Distilled the working practices from this project into an

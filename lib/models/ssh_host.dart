@@ -19,6 +19,7 @@ class SshHost {
     this.jumpHostId,
     this.startupCommand = '',
     this.keepAliveSeconds = 0,
+    this.compactPrompt = false,
     List<String>? tags,
   })  : id = id ?? _uuid.v4(),
         tags = tags ?? const [];
@@ -45,6 +46,10 @@ class SshHost {
   /// Server keep-alive interval in seconds (0 = disabled).
   final int keepAliveSeconds;
 
+  /// When true, inject a short PS1 on connect so a long server hostname
+  /// doesn't eat the command line.
+  final bool compactPrompt;
+
   final List<String> tags;
 
   String get displayName => label.trim().isEmpty ? '$username@$host' : label;
@@ -64,6 +69,7 @@ class SshHost {
     bool clearJumpHostId = false,
     String? startupCommand,
     int? keepAliveSeconds,
+    bool? compactPrompt,
     List<String>? tags,
   }) {
     return SshHost(
@@ -78,6 +84,7 @@ class SshHost {
       jumpHostId: clearJumpHostId ? null : (jumpHostId ?? this.jumpHostId),
       startupCommand: startupCommand ?? this.startupCommand,
       keepAliveSeconds: keepAliveSeconds ?? this.keepAliveSeconds,
+      compactPrompt: compactPrompt ?? this.compactPrompt,
       tags: tags ?? this.tags,
     );
   }
@@ -94,6 +101,7 @@ class SshHost {
         'jumpHostId': jumpHostId,
         'startupCommand': startupCommand,
         'keepAliveSeconds': keepAliveSeconds,
+        'compactPrompt': compactPrompt,
         'tags': tags,
       };
 
@@ -112,6 +120,7 @@ class SshHost {
         jumpHostId: json['jumpHostId'] as String?,
         startupCommand: json['startupCommand'] as String? ?? '',
         keepAliveSeconds: (json['keepAliveSeconds'] as num?)?.toInt() ?? 0,
+        compactPrompt: json['compactPrompt'] as bool? ?? false,
         tags: (json['tags'] as List<dynamic>?)
                 ?.map((e) => e.toString())
                 .toList() ??

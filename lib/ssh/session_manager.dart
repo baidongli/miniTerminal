@@ -116,6 +116,12 @@ class SessionManager extends ChangeNotifier {
         notifyListeners();
       }));
 
+      if (session.host.compactPrompt) {
+        // Short prompt: user + cwd basename, no long server hostname.
+        shell.write(utf8.encode(
+            "export PS1='[\\u \\W]\\\$ '; export PROMPT_COMMAND=\n"));
+      }
+
       final startup = session.host.startupCommand.trim();
       if (startup.isNotEmpty) {
         shell.write(utf8.encode('$startup\n'));

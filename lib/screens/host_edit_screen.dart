@@ -30,6 +30,7 @@ class _HostEditScreenState extends State<HostEditScreen> {
   String? _keyId;
   String? _groupId;
   String? _jumpHostId;
+  bool _compactPrompt = false;
 
   List<SshKey> _keys = [];
   List<HostGroup> _groups = [];
@@ -55,6 +56,7 @@ class _HostEditScreenState extends State<HostEditScreen> {
     _keyId = h?.keyId;
     _groupId = h?.groupId;
     _jumpHostId = h?.jumpHostId;
+    _compactPrompt = h?.compactPrompt ?? false;
     _loadRefs();
   }
 
@@ -103,6 +105,7 @@ class _HostEditScreenState extends State<HostEditScreen> {
       jumpHostId: _jumpHostId,
       clearJumpHostId: _jumpHostId == null,
       startupCommand: _startup.text.trim(),
+      compactPrompt: _compactPrompt,
       tags: _tags.text
           .split(',')
           .map((s) => s.trim())
@@ -234,6 +237,14 @@ class _HostEditScreenState extends State<HostEditScreen> {
               decoration: const InputDecoration(
                   labelText: 'Startup command (optional)'),
               autocorrect: false,
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Compact prompt'),
+              subtitle: const Text(
+                  'Shorten PS1 on connect (hide long server hostname)'),
+              value: _compactPrompt,
+              onChanged: (v) => setState(() => _compactPrompt = v),
             ),
             TextFormField(
               controller: _tags,

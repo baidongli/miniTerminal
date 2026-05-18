@@ -13,6 +13,17 @@ Template:
 
 ---
 
+## 2026-05-17 — Compact-prompt toggle
+
+**Done:** Root cause of "no room to type" was the server's long PS1
+(Alibaba ECS instance-id hostname), not the app. Added per-host
+**Compact prompt** switch (host_edit) → on connect, session_manager
+injects `export PS1='[\u \W]\$ '` (+ clears PROMPT_COMMAND). New
+`compactPrompt` field on SshHost (json/copyWith).
+**Files:** models/ssh_host.dart, ssh/session_manager.dart,
+screens/host_edit_screen.dart
+**Next:** User rebuilds, enables it on the host, verifies short prompt.
+
 ## 2026-05-17 — Connection works; reclaim terminal width
 
 **Done:** INTERNET fix confirmed — SSH connects and runs commands on

@@ -13,6 +13,13 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
+### Store distribution (2026-05-17)
+- App id locked: `com.baidongli.miniterminal` (CI `--org com.baidongli`).
+- Google Play: CI builds signed AAB when keystore Secrets are set
+  (else skipped; APK sideload pipeline unaffected). See STORE_RELEASE.md.
+- App Store: bundle id/version/icon ready; iOS job = release no-codesign
+  until an Apple Developer account exists (hard Apple requirement).
+
 ### Polish pass (2026-05-17, CI-GREEN, build a5f9be0)
 - APK now **20.7 MB** (was 157 MB debug) — release/arm64 split.
 - **host-key TOFU**: wired into the dartssh2 handshake via

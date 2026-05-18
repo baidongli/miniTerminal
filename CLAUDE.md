@@ -19,6 +19,8 @@ alternative to Termius. Built with **Flutter** (pure-Dart SSH via
 4. **README.md** — user-facing build & run instructions.
 5. **DEVELOPMENT_PLAYBOOK.md** — reusable, app-agnostic engineering
    rules distilled from this project. Follow it here and on future apps.
+6. **STORE_RELEASE.md** — Google Play / App Store publishing steps,
+   required keystore + GitHub Secrets, iOS-pending-account status.
 
 ## Working agreement
 

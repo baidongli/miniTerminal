@@ -13,6 +13,24 @@ Template:
 
 ---
 
+## 2026-05-17 — Store-ready: real bundle id + Play AAB + iOS scaffolding
+
+**Done:** Locked app id `com.baidongli.miniterminal` (CI uses
+`flutter create --org com.baidongli`). CI now also builds a **signed
+AAB** for Google Play when keystore GitHub Secrets are present
+(`tool/patch_android_signing.py` injects upload-key signing into the
+Kotlin Gradle; defensive — no secrets ⇒ skipped, APK pipeline
+unchanged). Build number from CI run number for monotonic versionCode.
+iOS job builds release (no codesign) pending an Apple Developer
+account; signing/upload steps documented for later. Added
+STORE_RELEASE.md.
+**Why:** User wants App Store + Google Play distribution; has Play
+Console, no Apple account yet.
+**Files:** .github/workflows/android.yml, tool/patch_android_signing.py,
+STORE_RELEASE.md, CLAUDE.md
+**Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
+emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
+
 ## 2026-05-17 — Add reusable DEVELOPMENT_PLAYBOOK.md
 
 **Done:** Distilled the working practices from this project into an

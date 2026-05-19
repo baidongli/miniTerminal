@@ -31,6 +31,20 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Local dev bootstrap (user has full Mac toolchain)
+
+**Done:** User revealed a complete local environment (Flutter 3.44,
+Xcode 16, Android SDK, 2 devices). Added `tool/setup_local.sh` that
+reproduces CI's steps exactly (flutter create --org com.baidongli,
+MainActivity→FragmentActivity, INTERNET/USE_BIOMETRIC, pub get, icons)
+so local and CI builds don't drift. README gained a "Local development"
+section. Feedback loop is now local-fast (no push→CI→screenshot);
+Claude still can't compile cloud-side so CI stays the release pipeline.
+iOS local device testing now possible via free Apple ID (paid account
+only needed for App Store submission).
+**Files:** tool/setup_local.sh, README.md, CURRENT_STATE.md
+**Next:** User runs setup_local.sh + flutter run; iterate locally.
+
 ## 2026-05-17 — Split playbook: generic vs Flutter-specific
 
 **Done:** Rewrote `DEVELOPMENT_PLAYBOOK.md` to be fully

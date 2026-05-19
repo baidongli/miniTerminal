@@ -13,6 +13,14 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
+### Local dev available (2026-05-17)
+User has a full Mac toolchain (Flutter 3.44, Xcode 16, Android SDK,
+devices). `tool/setup_local.sh` bootstraps an identical-to-CI local
+env (`flutter run` hot reload; iOS on device via free Apple ID).
+Claude still has no toolchain — but the feedback loop is now
+local-fast: user runs locally, pastes exact errors, Claude fixes.
+CI remains the release/artifact pipeline.
+
 ### Store distribution (2026-05-17)
 - App id locked: `com.baidongli.miniterminal` (CI `--org com.baidongli`).
 - Google Play: CI builds signed AAB when keystore Secrets are set

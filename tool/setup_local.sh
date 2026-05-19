@@ -32,6 +32,13 @@ grep -q 'USE_BIOMETRIC' "$MAN" || perl -pi -e \
   's{<application}{<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application}' \
   "$MAN"
 
+GR=android/app/build.gradle.kts
+echo "==> Removing forced NDK (app has no native code; avoids NDK download)"
+if [ -f "$GR" ]; then
+  perl -ni -e 'print unless /^\s*ndkVersion\s*=/' "$GR"
+  echo "   stripped ndkVersion from $GR"
+fi
+
 echo "==> flutter pub get"
 flutter pub get
 

@@ -51,6 +51,11 @@ jobs:
             's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$MAN"
           grep -q 'USE_BIOMETRIC' "$MAN" || sed -i \
             's#<application#<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application#' "$MAN"
+          GR=android/app/build.gradle.kts
+          if [ -f "$GR" ]; then
+            sed -i '/^[[:space:]]*ndkVersion[[:space:]]*=/d' "$GR"
+            echo "Stripped forced ndkVersion (no native code)."
+          fi
 
       - name: Get dependencies
         run: flutter pub get

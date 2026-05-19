@@ -40,11 +40,17 @@ dart run flutter_launcher_icons
 
 cat <<'EOF'
 
-Done. Next:
-  flutter devices            # list connected devices
-  flutter run                # run on a device/simulator (hot reload: r)
+Done. Next (run each command on its own line, no trailing text):
+
+  flutter devices
+  flutter run
+  (in the run session, press r = hot reload, R = restart, q = quit)
 
 iOS on a real device (free Apple ID, 7-day, no paid account needed):
-  open ios/Runner.xcworkspace   # set Signing team once, then:
-  flutter run -d <ios-device-id>
+  open ios/Runner.xcworkspace
+  set the Signing team once in Xcode, then:
+  flutter run
+
+Note: zsh does NOT treat '#' as a comment interactively, so never
+paste a command with a trailing '# ...' note — it breaks the command.
 EOF

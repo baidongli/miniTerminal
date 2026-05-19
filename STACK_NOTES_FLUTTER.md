@@ -76,3 +76,12 @@
   不阻断 Android 产出。
 - 产物发滚动 pre-release（tag 如 `android-latest`）+ workflow
   artifact 双保险。
+
+## 本地开发（macOS / zsh）
+
+- 给用户的命令**别带行内 `# 注释`**：zsh 交互模式默认不把 `#`
+  当注释（`interactive_comments` 关闭），整行粘贴会把 `#...`
+  当参数传进去，如 `flutter run # ...` → `Target file "#" not
+  found.`。命令与说明分行写。
+- `tool/setup_local.sh` 复刻 CI 全部 patch，保证本地/CI 不漂移；
+  删了 `android/ ios/` 后重跑即可。

@@ -56,21 +56,7 @@ jobs:
             sed -i '/^[[:space:]]*ndkVersion[[:space:]]*=/d' "$GR"
             echo "Stripped forced ndkVersion (no native code)."
           fi
-          PROJ=android/build.gradle.kts
-          if [ -f "$PROJ" ] && ! grep -q 'miniterminal-compilesdk' "$PROJ"; then
-            cat >> "$PROJ" <<'KTS'
-
-// miniterminal-compilesdk: force compileSdk 36 on all Android modules
-subprojects {
-    afterEvaluate {
-        extensions.findByName("android")?.withGroovyBuilder {
-            "compileSdkVersion"(36)
-        }
-    }
-}
-KTS
-            echo "Forced compileSdk=36 for all Android modules."
-          fi
+          python3 tool/patch_android_compilesdk.py
 
       - name: Get dependencies
         run: flutter pub get

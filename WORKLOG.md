@@ -31,6 +31,18 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Force compileSdk 36 (plugin AAR metadata conflict)
+
+**Done:** Build got past NDK; new error: `file_picker` →
+`flutter_plugin_android_lifecycle` requires compileSdk 36 but plugin
+modules compiled against android-34. setup_local.sh + CI now append a
+`subprojects { afterEvaluate { ... compileSdkVersion(36) } }` override
+to the project-level `android/build.gradle.kts`. (Transient network
+blips during the run self-recovered via Gradle retry.)
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+STACK_NOTES_FLUTTER.md
+**Next:** User pulls, re-runs setup_local.sh + flutter run.
+
 ## 2026-05-17 — Strip forced NDK (no native code; unblock local build)
 
 **Done:** Local `flutter run` kept failing: Flutter 3.44 template

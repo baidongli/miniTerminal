@@ -39,6 +39,23 @@
   已加进 `tool/setup_local.sh` 和 CI workflow。
 - 若曾下过损坏 NDK：`rm -rf $ANDROID_HOME/ndk/<ver>` 清掉。
 
+## compileSdk 冲突
+
+- 传递插件（如 `file_picker` → `flutter_plugin_android_lifecycle`）
+  可能要求 `compileSdk ≥ 36`，而插件模块默认编译在 34 →
+  `Dependency ... requires ... version 36 ... is currently compiled
+  against android-34`。
+- 修：项目级 `android/build.gradle.kts` 追加，对所有 Android
+  子模块强制 compileSdk：
+  ```kotlin
+  subprojects { afterEvaluate {
+      extensions.findByName("android")?.withGroovyBuilder {
+          "compileSdkVersion"(36) } } }
+  ```
+  比逐个升插件版本稳。已加进 setup_local.sh + CI。
+- 瞬时网络抖动（`Could not resolve ... aaptcompiler` /
+  `handshake`）Gradle 会自动 retry，多数能自恢复，别误判为终错。
+
 ## 包体积
 
 - debug APK 可达 ~150MB；`flutter build apk --release

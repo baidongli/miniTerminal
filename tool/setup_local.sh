@@ -10,7 +10,10 @@ set -euo pipefail
 
 ORG=com.baidongli
 
-echo "==> Generating android/ ios/ scaffolding (org $ORG)"
+echo "==> Clean-regenerating android/ ios/ (they are generated, not"
+echo "    committed; flutter create does NOT overwrite existing files,"
+echo "    so we wipe first to match CI's fresh checkout exactly)"
+rm -rf android ios
 flutter create --org "$ORG" --project-name miniterminal \
   --platforms=android,ios .
 

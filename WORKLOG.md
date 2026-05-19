@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — setup_local.sh clean-regenerates android/ios
+
+**Done:** Same line-30 afterEvaluate error persisted because
+`flutter create` does NOT overwrite existing `android/` files — the
+prior bad-appended build.gradle.kts stayed and the idempotent patcher
+skipped it (marker present). Local accumulated stale state while CI
+(fresh checkout) was fine. setup_local.sh now `rm -rf android ios`
+before `flutter create` to match CI exactly.
+**Files:** tool/setup_local.sh, STACK_NOTES_FLUTTER.md
+**Next:** User pulls, re-runs setup_local.sh (now wipes) + flutter run.
+
 ## 2026-05-17 — Fix compileSdk patch ordering (afterEvaluate)
 
 **Done:** Appended compileSdk override failed:

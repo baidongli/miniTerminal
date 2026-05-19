@@ -118,5 +118,9 @@
   当注释（`interactive_comments` 关闭），整行粘贴会把 `#...`
   当参数传进去，如 `flutter run # ...` → `Target file "#" not
   found.`。命令与说明分行写。
-- `tool/setup_local.sh` 复刻 CI 全部 patch，保证本地/CI 不漂移；
-  删了 `android/ ios/` 后重跑即可。
+- `tool/setup_local.sh` 复刻 CI 全部 patch，保证本地/CI 不漂移。
+- **关键坑**：`flutter create` **不覆盖已存在的** `android/` 文件，
+  上次生成的（含已注入补丁的）文件会残留，二次 patch 因幂等标记
+  跳过 → 旧坏块原地不动，本地与 CI 漂移。所以 setup_local.sh 在
+  `flutter create` 前 `rm -rf android ios` 干净重建，对齐 CI 的
+  全新检出。

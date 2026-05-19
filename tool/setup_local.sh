@@ -39,6 +39,25 @@ if [ -f "$GR" ]; then
   echo "   stripped ndkVersion from $GR"
 fi
 
+PROJ=android/build.gradle.kts
+echo "==> Forcing compileSdk 36 for all Android modules"
+if [ -f "$PROJ" ] && ! grep -q 'miniterminal-compilesdk' "$PROJ"; then
+  cat >> "$PROJ" <<'KTS'
+
+// miniterminal-compilesdk: some plugins (file_picker ->
+// flutter_plugin_android_lifecycle) require compileSdk 36. Force it on
+// every Android subproject regardless of each plugin's own default.
+subprojects {
+    afterEvaluate {
+        extensions.findByName("android")?.withGroovyBuilder {
+            "compileSdkVersion"(36)
+        }
+    }
+}
+KTS
+  echo "   appended compileSdk=36 override to $PROJ"
+fi
+
 echo "==> flutter pub get"
 flutter pub get
 

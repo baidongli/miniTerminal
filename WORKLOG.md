@@ -31,6 +31,20 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Strip forced NDK (no native code; unblock local build)
+
+**Done:** Local `flutter run` kept failing: Flutter 3.44 template
+forces `ndkVersion = flutter.ndkVersion`, Gradle tried to download NDK,
+flaky network produced a corrupt NDK (`Archive is not a ZIP` /
+`CXX1101 ... no source.properties`), infinite retry. App has zero
+native code → NDK unneeded. setup_local.sh + CI now delete the
+`ndkVersion` line after `flutter create`. Documented in
+STACK_NOTES_FLUTTER.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+STACK_NOTES_FLUTTER.md
+**Next:** User deletes the corrupt NDK dir, pulls, re-runs
+setup_local.sh + flutter run.
+
 ## 2026-05-17 — Local dev bootstrap (user has full Mac toolchain)
 
 **Done:** User revealed a complete local environment (Flutter 3.44,

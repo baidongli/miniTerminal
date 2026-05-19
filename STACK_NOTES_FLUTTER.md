@@ -27,6 +27,18 @@
 - 切 debug↔release 或换密钥 → 签名变 → 用户必须**先卸载旧包**，
   本地数据丢失，提前告知。
 
+## NDK：纯 Dart/Kotlin app 不需要它
+
+- Flutter 3.44 `flutter create` 在 `android/app/build.gradle.kts`
+  写死 `ndkVersion = flutter.ndkVersion`，逼 Gradle 解析/下载 NDK，
+  即使项目无 C/C++ 代码。网络不稳时下成损坏包
+  （`Archive is not a ZIP archive` / `did not have a
+  source.properties` / `CXX1101`），反复重试卡死。
+- 修：`flutter create` 后删掉该行
+  （`sed -i '/^\s*ndkVersion\s*=/d'`），AGP 就不再碰 NDK。
+  已加进 `tool/setup_local.sh` 和 CI workflow。
+- 若曾下过损坏 NDK：`rm -rf $ANDROID_HOME/ndk/<ver>` 清掉。
+
 ## 包体积
 
 - debug APK 可达 ~150MB；`flutter build apk --release

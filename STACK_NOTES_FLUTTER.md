@@ -52,7 +52,13 @@
       extensions.findByName("android")?.withGroovyBuilder {
           "compileSdkVersion"(36) } } }
   ```
-  比逐个升插件版本稳。已加进 setup_local.sh + CI。
+  比逐个升插件版本稳。已加进 setup_local.sh + CI
+  （`tool/patch_android_compilesdk.py`）。
+- **坑**：该 `subprojects { afterEvaluate {} }` 必须**插在** Flutter
+  root `build.gradle.kts` 的 `subprojects { evaluationDependsOn(
+  ":app") }` **之前**——后者会提前评估子项目，注册晚了报
+  `Cannot run Project.afterEvaluate when the project is already
+  evaluated`。脚本按"插到第一个 subprojects 块前"实现。
 - 瞬时网络抖动（`Could not resolve ... aaptcompiler` /
   `handshake`）Gradle 会自动 retry，多数能自恢复，别误判为终错。
 

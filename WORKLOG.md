@@ -31,6 +31,19 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Fix compileSdk patch ordering (afterEvaluate)
+
+**Done:** Appended compileSdk override failed:
+`Cannot run Project.afterEvaluate when the project is already
+evaluated` — Flutter's `subprojects { evaluationDependsOn(":app") }`
+pre-evaluates subprojects, so an afterEvaluate appended after it is
+invalid. New `tool/patch_android_compilesdk.py` INSERTS the block
+BEFORE the first `subprojects {` (valid registration, still overrides
+plugin defaults). setup_local.sh + CI now call it instead of appending.
+**Files:** tool/patch_android_compilesdk.py, tool/setup_local.sh,
+.github/workflows/android.yml, STACK_NOTES_FLUTTER.md
+**Next:** User pulls, re-runs setup_local.sh + flutter run.
+
 ## 2026-05-17 — Force compileSdk 36 (plugin AAR metadata conflict)
 
 **Done:** Build got past NDK; new error: `file_picker` →

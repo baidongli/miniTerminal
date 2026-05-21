@@ -1,8 +1,7 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 import '../models/ssh_key.dart';
 import '../ssh/key_gen.dart';
@@ -47,11 +46,10 @@ class _KeysScreenState extends State<KeysScreen> {
   }
 
   Future<void> _import() async {
-    final picked = await FilePicker.platform.pickFiles();
-    final path = picked?.files.single.path;
-    if (path == null) return;
-    final pem = await File(path).readAsString();
-    final name = await _prompt('Key name', path.split('/').last);
+    final picked = await openFile();
+    if (picked == null) return;
+    final pem = await picked.readAsString();
+    final name = await _prompt('Key name', picked.name);
     if (name == null || name.isEmpty) return;
     final pass = await _prompt('Passphrase (blank if none)', '');
     await context.read<AppRepository>().keys.upsert(

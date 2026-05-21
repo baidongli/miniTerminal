@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dartssh2/dartssh2.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -117,13 +117,12 @@ class _SftpScreenState extends State<SftpScreen> {
   }
 
   Future<void> _upload() async {
-    final picked = await FilePicker.platform.pickFiles();
-    final path = picked?.files.single.path;
-    if (path == null) return;
+    final picked = await openFile();
+    if (picked == null) return;
     setState(() => _busy = true);
     try {
-      final data = await File(path).readAsBytes();
-      final name = path.split('/').last;
+      final data = await picked.readAsBytes();
+      final name = picked.name;
       final remote = _join(_cwd, name);
       final file = await _sftp!.open(
         remote,

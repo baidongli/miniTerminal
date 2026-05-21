@@ -31,6 +31,22 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Distribution: Play auto-upload + TestFlight plan
+
+**Done:** User wants Google Play + iOS TestFlight. Added a gated
+"Upload AAB to Google Play internal track" step (runs only when both
+keystore secrets and `PLAY_SERVICE_ACCOUNT_JSON` are set; uses
+r0adkll/upload-google-play). Expanded STORE_RELEASE.md: Play service-
+account setup + first-manual-upload caveat + the simple "share APK
+link" option; full iOS TestFlight step list (needs $99 account, API
+key secrets) — CI wiring deferred until the account exists so it can be
+validated with real credentials.
+**Why:** Distribute to other people.
+**Files:** .github/workflows/android.yml, STORE_RELEASE.md
+**Next:** User sets up Play keystore + service account → CI auto-ships
+to internal track. For iOS, register $99 account then ping to wire
+TestFlight.
+
 ## 2026-05-22 — App display name → "MiniTerminal"
 
 **Done:** `flutter create --project-name miniterminal` set the

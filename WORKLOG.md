@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — Document iOS on-device run (free Apple ID)
+
+**Done:** User wants the app on their own iPhone. Walked through the
+free-Apple-ID 7-day path (CocoaPods, Developer Mode, Xcode signing
+team, trust cert) and recorded it in STACK_NOTES_FLUTTER for reuse.
+No code change — the Flutter app already runs on iOS; this is
+build/run/signing only.
+**Files:** STACK_NOTES_FLUTTER.md
+**Next:** User runs on iPhone; later, $99 account → wire CI iOS
+signed archive for App Store.
+
 ## 2026-05-17 — setup_local.sh clean-regenerates android/ios
 
 **Done:** Same line-30 afterEvaluate error persisted because

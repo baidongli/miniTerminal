@@ -85,6 +85,20 @@
 - 加原生依赖的插件（file_picker / path_provider / secure_storage
   等）：编译过不代表运行过，真机逐个验证。
 
+## iOS 真机调试（免费 Apple ID，无需 $99）
+
+1. 装 CocoaPods：`pod --version`，没有则 `sudo gem install cocoapods`。
+2. iPhone 首次需开**开发者模式**（iOS 16+）：设置 → 隐私与安全性 →
+   开发者模式 → 开 → 重启。
+3. Xcode → Settings → Accounts 加 Apple ID（免费）。
+4. `open ios/Runner.xcworkspace` → Runner target → Signing &
+   Capabilities → 勾 Automatically manage signing → Team 选
+   (Personal Team)。bundle id 冲突就改唯一值。
+5. `flutter run` 选真机；首次在 iPhone 设置 → 通用 →
+   VPN与设备管理里**信任**开发者证书。
+6. 免费签名有效期 **7 天**，到期重新 `flutter run`。
+7. `pod install`（flutter run 自动触发）走 GitHub/CDN，网络差时开 VPN。
+
 ## Dart / API 细节（无编译器时先查 pub.dev 再写）
 
 - 自定义类名会和库导出撞名（本项目 `TerminalThemes` 撞 `xterm`）

@@ -31,6 +31,22 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — iOS running on a real iPhone (free Apple ID)
+
+**Done:** The app now installs and runs on the user's iPhone
+(iPhone18,1, iOS 26.5) in release mode, free 7-day signing (team
+35L8KT9ZS8). Chain of fixes worked through: SPM disabled (CocoaPods
+only), Xcode upgraded to 26.x for the iOS 26 device DDI, iOS platform
+component downloaded, disk space freed (build failed with "No space
+left on device"), and `flutter run --release` (debug iOS builds crash
+when launched standalone without the debugger). No iOS-specific code —
+same Flutter `lib/`.
+**Why:** User wanted an iOS version on their own iPhone.
+**Files:** CURRENT_STATE.md (doc only)
+**Next:** Optional: slim file_picker's heavy iOS deps (DKPhotoGallery/
+SDWebImage chain); App Store needs a $99 account. App is usable on
+device for 7 days; re-run `flutter run --release` to renew.
+
 ## 2026-05-17 — iOS: disable SPM (Module not found)
 
 **Done:** iOS device build failed `Module 'flutter_secure_storage'

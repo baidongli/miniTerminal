@@ -13,6 +13,15 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
+### iOS device-verified (2026-05-22)
+The app now runs on a real iPhone (iPhone18,1, iOS 26.5) in release
+mode via a free Apple ID (7-day signing, team 35L8KT9ZS8). Getting
+there required: update Xcode to 26.x + macOS, download the iOS 26
+platform component, disable Swift Package Manager (CocoaPods only),
+free disk space, and use `flutter run --release` (iOS debug builds
+crash if launched without the debugger attached). The Flutter app is
+the same `lib/` code as Android — no iOS-specific code was written.
+
 ### Local dev available (2026-05-17)
 User has a full Mac toolchain (Flutter 3.44, Xcode 16, Android SDK,
 devices). `tool/setup_local.sh` bootstraps an identical-to-CI local

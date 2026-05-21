@@ -31,6 +31,18 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — App display name → "MiniTerminal"
+
+**Done:** `flutter create --project-name miniterminal` set the
+home-screen label lowercase. Patched the display name to "MiniTerminal":
+Android `android:label` (setup_local.sh + CI android job) and iOS
+`CFBundleDisplayName` via PlistBuddy (setup_local.sh + CI ios job). The
+Dart package name in pubspec stays lowercase (required).
+**Why:** User wants proper casing on the icon.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml
+**Next:** CI rebuilds Android; user re-runs `flutter run --release` for
+the iPhone to pick up the new name.
+
 ## 2026-05-22 — Replace file_picker with file_selector (slim iOS)
 
 **Done:** Swapped `file_picker` → `file_selector` (pubspec + both call

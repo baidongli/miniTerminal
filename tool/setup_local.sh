@@ -39,6 +39,15 @@ grep -q 'USE_BIOMETRIC' "$MAN" || perl -pi -e \
   's{<application}{<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application}' \
   "$MAN"
 
+echo "==> Setting display name to 'MiniTerminal'"
+perl -pi -e 's/android:label="miniterminal"/android:label="MiniTerminal"/' "$MAN"
+PLIST=ios/Runner/Info.plist
+if [ -f "$PLIST" ]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName MiniTerminal" "$PLIST" \
+    2>/dev/null \
+    || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string MiniTerminal" "$PLIST"
+fi
+
 GR=android/app/build.gradle.kts
 echo "==> Removing forced NDK (app has no native code; avoids NDK download)"
 if [ -f "$GR" ]; then

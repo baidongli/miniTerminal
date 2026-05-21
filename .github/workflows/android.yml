@@ -51,6 +51,7 @@ jobs:
             's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$MAN"
           grep -q 'USE_BIOMETRIC' "$MAN" || sed -i \
             's#<application#<uses-permission android:name="android.permission.USE_BIOMETRIC"/>\n    <application#' "$MAN"
+          sed -i 's/android:label="miniterminal"/android:label="MiniTerminal"/' "$MAN"
           GR=android/app/build.gradle.kts
           if [ -f "$GR" ]; then
             sed -i '/^[[:space:]]*ndkVersion[[:space:]]*=/d' "$GR"
@@ -143,6 +144,12 @@ jobs:
         run: >
           flutter create --org ${{ env.APP_ORG }}
           --project-name miniterminal --platforms=android,ios .
+
+      - name: Set iOS display name to MiniTerminal
+        run: |
+          PLIST=ios/Runner/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName MiniTerminal" "$PLIST" \
+            || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string MiniTerminal" "$PLIST"
 
       - name: Get dependencies
         run: flutter pub get

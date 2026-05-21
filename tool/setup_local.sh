@@ -10,6 +10,10 @@ set -euo pipefail
 
 ORG=com.baidongli
 
+echo "==> Disabling Swift Package Manager (flutter_secure_storage is"
+echo "    CocoaPods-only; SPM+Pods hybrid causes 'Module not found')"
+flutter config --no-enable-swift-package-manager >/dev/null || true
+
 echo "==> Clean-regenerating android/ ios/ (they are generated, not"
 echo "    committed; flutter create does NOT overwrite existing files,"
 echo "    so we wipe first to match CI's fresh checkout exactly)"

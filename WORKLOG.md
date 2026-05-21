@@ -31,6 +31,18 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-17 — iOS: disable SPM (Module not found)
+
+**Done:** iOS device build failed `Module 'flutter_secure_storage'
+not found` — Flutter 3.44 enables Swift Package Manager by default, but
+that plugin is CocoaPods-only; the SPM+Pods hybrid breaks the module.
+Added `flutter config --no-enable-swift-package-manager` to
+setup_local.sh (forces all-CocoaPods) + documented in
+STACK_NOTES_FLUTTER.
+**Files:** tool/setup_local.sh, STACK_NOTES_FLUTTER.md
+**Next:** User: flutter config --no-enable-swift-package-manager,
+flutter clean, setup_local.sh, flutter run.
+
 ## 2026-05-17 — Document iOS on-device run (free Apple ID)
 
 **Done:** User wants the app on their own iPhone. Walked through the

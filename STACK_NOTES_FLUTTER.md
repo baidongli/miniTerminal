@@ -98,6 +98,12 @@
    VPN与设备管理里**信任**开发者证书。
 6. 免费签名有效期 **7 天**，到期重新 `flutter run`。
 7. `pod install`（flutter run 自动触发）走 GitHub/CDN，网络差时开 VPN。
+8. **Module 'X' not found**（如 flutter_secure_storage）：Flutter 默认
+   开了 Swift Package Manager，而该插件只支持 CocoaPods，SPM+Pods
+   混用就报找不到模块。修：`flutter config
+   --no-enable-swift-package-manager` → `flutter clean` →
+   重建。已加进 setup_local.sh。另：Xcode 必须开
+   `Runner.xcworkspace`（非 `.xcodeproj`），否则也报 module not found。
 
 ## Dart / API 细节（无编译器时先查 pub.dev 再写）
 

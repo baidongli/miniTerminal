@@ -31,6 +31,21 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Replace file_picker with file_selector (slim iOS)
+
+**Done:** Swapped `file_picker` → `file_selector` (pubspec + both call
+sites: keys_screen key import, sftp_screen upload). file_picker pulled
+a heavy iOS image-gallery dep chain (DKPhotoGallery/SDWebImage/etc.)
+just for file selection; file_selector uses the native document picker
+with no such deps → smaller app, faster build. `openFile()` returns
+XFile (path/name/readAsBytes/readAsString). version 0.9.1+10.
+**Why:** User approved slimming.
+**Files:** pubspec.yaml, lib/screens/keys_screen.dart,
+lib/screens/sftp_screen.dart, STACK_NOTES_FLUTTER.md
+**Next:** CI auto-rebuilds Android APK/AAB on push. For iPhone, user
+re-runs `flutter run --release` to get the slimmed build + verify file
+pick (key import / SFTP upload) still works.
+
 ## 2026-05-22 — iOS running on a real iPhone (free Apple ID)
 
 **Done:** The app now installs and runs on the user's iPhone

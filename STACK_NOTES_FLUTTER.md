@@ -62,6 +62,15 @@
 - 瞬时网络抖动（`Could not resolve ... aaptcompiler` /
   `handshake`）Gradle 会自动 retry，多数能自恢复，别误判为终错。
 
+## 依赖体积：file_picker 很重
+
+- `file_picker` 在 iOS 拉了一整套图库依赖（DKImagePickerController →
+  DKPhotoGallery / SDWebImage / SwiftyGif），仅为"选个文件"，却显著
+  增大 App 体积与构建时间。
+- 若只需选普通文件，用官方 `file_selector`（`openFile()` 返回
+  `XFile`，有 `.path/.name/readAsBytes/readAsString`），原生
+  document picker，无图库依赖。本项目已从 file_picker 换成它。
+
 ## 包体积
 
 - debug APK 可达 ~150MB；`flutter build apk --release

@@ -7,7 +7,10 @@ import 'json_prefs.dart';
 /// optional passphrase live in secure storage.
 class KeyStore {
   KeyStore({FlutterSecureStorage? secureStorage})
-      : _secure = secureStorage ?? const FlutterSecureStorage();
+      : _secure = secureStorage ?? const FlutterSecureStorage(
+              mOptions:
+                  MacOsOptions(usesDataProtectionKeychain: false),
+            );
 
   static const _keysKey = 'miniterminal.keys';
   static String _pemKey(String id) => 'miniterminal.keypem.$id';

@@ -31,6 +31,20 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — macOS: use legacy keychain (real -34018 root cause)
+
+**Done:** -34018 persisted even with sandbox off. Real cause:
+flutter_secure_storage defaults to the macOS data-protection keychain,
+which requires proper Team signing (ad-hoc can't satisfy). Verified the
+API on pub.dev, then set
+`FlutterSecureStorage(mOptions: MacOsOptions(usesDataProtectionKeychain:
+false))` in HostStore and KeyStore → uses the legacy keychain, no
+entitlement/Team needed. macOS-only option; iOS/Android ignore it.
+**Files:** lib/services/host_store.dart, lib/services/key_store.dart,
+STACK_NOTES_FLUTTER.md
+**Next:** User hot-restart (R) or re-run; verify save host + connect on
+macOS.
+
 ## 2026-05-22 — macOS: disable sandbox (ad-hoc can't grant keychain)
 
 **Done:** keychain-access-groups still gave -34018 because ad-hoc local

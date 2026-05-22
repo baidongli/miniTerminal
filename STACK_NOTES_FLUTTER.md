@@ -73,11 +73,15 @@
   和 `keychain-access-groups` 等 entitlement——但 **ad-hoc 本地签名
   (无 Team)授不了 `keychain-access-groups` 这种受限 entitlement**,
   仍 -34018。
-- **本项目的解法:关闭沙盒**(两个 entitlements 文件
-  `com.apple.security.app-sandbox = false`)。非沙盒下网络/钥匙串
-  直接可用,适合本地调试 + Developer ID(店外)分发。
-  **代价:不能上 Mac App Store**(那要求沙盒)。要上架时再开沙盒 +
-  配开发者 Team 让受限 entitlement 生效。
+- **真正根因:flutter_secure_storage 默认用 data-protection
+  keychain**,它强制要求带 Team 的正规签名(ad-hoc 给不了)→ 关沙盒
+  也没用,仍 -34018。**解法:`FlutterSecureStorage(mOptions:
+  MacOsOptions(usesDataProtectionKeychain: false))`** 改用传统钥匙串,
+  无需 Team/entitlement。该选项只影响 macOS,iOS/Android 忽略。
+- 配合**关闭沙盒**(两个 entitlements `app-sandbox = false`),本地
+  网络 + 钥匙串就都通了,适合本地 + Developer ID(店外)分发。
+  **代价:不能上 Mac App Store**(要求沙盒);上架时再开沙盒 + 配
+  Team + 改回 data-protection keychain。
 - 应用名:改 `macos/Runner/Configs/AppInfo.xcconfig` 的
   `PRODUCT_NAME`(决定 .app 名与菜单名)。
 - 本地运行:`flutter run -d macos`。分发给别人需 Apple Developer ID

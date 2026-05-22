@@ -7,7 +7,10 @@ import 'json_prefs.dart';
 /// in the platform secure storage (iOS Keychain / Android Keystore).
 class HostStore {
   HostStore({FlutterSecureStorage? secureStorage})
-      : _secure = secureStorage ?? const FlutterSecureStorage();
+      : _secure = secureStorage ?? const FlutterSecureStorage(
+              mOptions:
+                  MacOsOptions(usesDataProtectionKeychain: false),
+            );
 
   static const _hostsKey = 'miniterminal.hosts';
   static String _passwordKey(String id) => 'miniterminal.password.$id';

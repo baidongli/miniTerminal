@@ -72,7 +72,9 @@ class _SnippetsScreenState extends State<SnippetsScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Snippets')),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _edit(), child: const Icon(Icons.add)),
+          heroTag: 'fab_snippets',
+          onPressed: () => _edit(),
+          child: const Icon(Icons.add)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _items.isEmpty

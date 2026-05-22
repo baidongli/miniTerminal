@@ -74,7 +74,9 @@ class _PortForwardScreenState extends State<PortForwardScreen> {
       floatingActionButton: _svc == null
           ? null
           : FloatingActionButton(
-              onPressed: _addForward, child: const Icon(Icons.add)),
+              heroTag: 'fab_forward',
+              onPressed: _addForward,
+              child: const Icon(Icons.add)),
       body: _busy
           ? const Center(child: CircularProgressIndicator())
           : _error.isNotEmpty

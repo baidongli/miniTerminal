@@ -128,6 +128,7 @@ class _HostsScreenState extends State<HostsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'fab_hosts',
         onPressed: () => _openEditor(),
         child: const Icon(Icons.add),
       ),

@@ -59,7 +59,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Groups')),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _edit(), child: const Icon(Icons.add)),
+          heroTag: 'fab_groups',
+          onPressed: () => _edit(),
+          child: const Icon(Icons.add)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _groups.isEmpty

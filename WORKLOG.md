@@ -31,6 +31,18 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Fix duplicate FAB Hero tag crash (all platforms)
+
+**Done:** Running on macOS surfaced a real cross-platform bug:
+`multiple heroes share the same tag <default FloatingActionButton tag>`.
+HomeScreen's IndexedStack keeps Hosts + Snippets (both have FABs) alive
+together; default FAB hero tags collide on a hero transition. Gave each
+FAB a unique `heroTag` (hosts/groups/snippets/forward).
+**Why:** macOS run threw the assertion and lost the connection.
+**Files:** lib/screens/{hosts,groups,snippets,port_forward}_screen.dart,
+STACK_NOTES_FLUTTER.md
+**Next:** Hot-restart / re-run; verify navigation + connect on macOS.
+
 ## 2026-05-22 — Add macOS desktop target
 
 **Done:** Enabled macOS. setup_local.sh now creates the macos platform

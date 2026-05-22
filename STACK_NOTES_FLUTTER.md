@@ -87,6 +87,13 @@
   `XFile`，有 `.path/.name/readAsBytes/readAsString`），原生
   document picker，无图库依赖。本项目已从 file_picker 换成它。
 
+## UI 陷阱
+
+- **多个 FloatingActionButton 撞 Hero tag**:`IndexedStack` 让多个
+  带 FAB 的页面同时存活,FAB 默认 hero tag 相同 → 导航做 hero 动画时
+  抛 `multiple heroes share the same tag`。给每个 FAB 设唯一
+  `heroTag`(或 `null`)。桌面端导航时最易触发,但属全平台 bug。
+
 ## 包体积
 
 - debug APK 可达 ~150MB；`flutter build apk --release
@@ -154,7 +161,6 @@
   查证后才接进握手，避免又一轮红叉。
 
 ## 移动端体验
-
 - 终端/编辑类视图设 `padding: EdgeInsets.zero` 收回边距宽度。
 - 长内容挤占输入（如服务器超长 PS1 主机名）→ 给开关/引导，
   别试图在客户端重写远端输出（裸流，hacky 不可靠）。

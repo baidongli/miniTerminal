@@ -31,6 +31,24 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — App Store prep: review keys, scrub competitor name, pro About
+
+**Done:** (1) Added App Store review Info.plist keys via PlistBuddy in
+setup_local.sh + CI: ITSAppUsesNonExemptEncryption=false,
+NSFaceIDUsageDescription, NSLocalNetworkUsageDescription. (2) Removed
+all competitor-name references from public/descriptive files (pubspec,
+README, CLAUDE, TASKS) — left historical WORKLOG entries. (3) Replaced
+the bare About tile with a professional About screen (icon, version,
+positioning, feature list, privacy statement) in
+lib/screens/about_screen.dart, linked from Settings.
+**Why:** User wants it App Store review-ready, no competitor mentions,
+and a more professional in-app About.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+lib/screens/about_screen.dart, lib/screens/settings_screen.dart,
+pubspec.yaml, README.md, CLAUDE.md, TASKS.md, STACK_NOTES_FLUTTER.md
+**Next:** At submission: provide a demo SSH server in review notes + a
+privacy policy URL. Android auto-rebuilds; iPhone re-run flutter run.
+
 ## 2026-05-22 — Distribution: Play auto-upload + TestFlight plan
 
 **Done:** User wants Google Play + iOS TestFlight. Added a gated

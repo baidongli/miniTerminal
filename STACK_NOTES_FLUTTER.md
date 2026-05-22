@@ -77,6 +77,18 @@
   --split-per-abi` 取 `app-arm64-v8a-release.apk` 降到 ~20MB。
 - 上 Play 用 `flutter build appbundle --release`（AAB）。
 
+## App Store 审核必备 Info.plist 键
+
+`flutter create` 后用 PlistBuddy patch（已加进 setup_local.sh + CI）：
+- `ITSAppUsesNonExemptEncryption = false`：用标准加密(SSH/TLS)走出口
+  合规豁免，免得每次提交都被问。
+- `NSFaceIDUsageDescription`：用了 local_auth 生物识别，缺了运行/审核
+  会出问题。
+- `NSLocalNetworkUsageDescription`：连局域网主机时 iOS 弹本地网络授权。
+- 连接类 App 审核还需：在「审核备注」给**可登录的演示 SSH 服务器**
+  (host/user/pass)，否则 reviewer 无法测 → 拒。
+- 商标:商店文案/App 内不要出现竞品名。
+
 ## 上架
 
 - **versionCode 必须递增**：CI 用 `--build-number=${{ github.run_number }}`。

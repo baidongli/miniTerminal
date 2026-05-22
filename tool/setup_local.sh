@@ -43,9 +43,16 @@ echo "==> Setting display name to 'MiniTerminal'"
 perl -pi -e 's/android:label="miniterminal"/android:label="MiniTerminal"/' "$MAN"
 PLIST=ios/Runner/Info.plist
 if [ -f "$PLIST" ]; then
-  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName MiniTerminal" "$PLIST" \
-    2>/dev/null \
-    || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string MiniTerminal" "$PLIST"
+  pb() { /usr/libexec/PlistBuddy -c "$1" "$PLIST" 2>/dev/null; }
+  pb "Set :CFBundleDisplayName MiniTerminal" \
+    || pb "Add :CFBundleDisplayName string MiniTerminal"
+  # App Store review keys: encryption export compliance + permission strings
+  pb "Set :ITSAppUsesNonExemptEncryption false" \
+    || pb "Add :ITSAppUsesNonExemptEncryption bool false"
+  pb "Set :NSFaceIDUsageDescription Unlock MiniTerminal with Face ID." \
+    || pb "Add :NSFaceIDUsageDescription string Unlock MiniTerminal with Face ID."
+  pb "Set :NSLocalNetworkUsageDescription MiniTerminal uses the local network to reach SSH servers on your network." \
+    || pb "Add :NSLocalNetworkUsageDescription string MiniTerminal uses the local network to reach SSH servers on your network."
 fi
 
 GR=android/app/build.gradle.kts

@@ -156,11 +156,18 @@ jobs:
           flutter create --org ${{ env.APP_ORG }}
           --project-name miniterminal --platforms=android,ios .
 
-      - name: Set iOS display name to MiniTerminal
+      - name: Set iOS display name + App Store review keys
         run: |
           PLIST=ios/Runner/Info.plist
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName MiniTerminal" "$PLIST" \
-            || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string MiniTerminal" "$PLIST"
+          pb() { /usr/libexec/PlistBuddy -c "$1" "$PLIST" 2>/dev/null; }
+          pb "Set :CFBundleDisplayName MiniTerminal" \
+            || pb "Add :CFBundleDisplayName string MiniTerminal"
+          pb "Set :ITSAppUsesNonExemptEncryption false" \
+            || pb "Add :ITSAppUsesNonExemptEncryption bool false"
+          pb "Set :NSFaceIDUsageDescription Unlock MiniTerminal with Face ID." \
+            || pb "Add :NSFaceIDUsageDescription string Unlock MiniTerminal with Face ID."
+          pb "Set :NSLocalNetworkUsageDescription MiniTerminal uses the local network to reach SSH servers on your network." \
+            || pb "Add :NSLocalNetworkUsageDescription string MiniTerminal uses the local network to reach SSH servers on your network."
 
       - name: Get dependencies
         run: flutter pub get

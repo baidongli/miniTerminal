@@ -72,6 +72,9 @@
   (`macos/Runner/DebugProfile.entitlements` 和 `Release.entitlements`)
   都加 `com.apple.security.network.client`;端口转发(本地监听)还需
   `com.apple.security.network.server`。否则连接静默失败。
+- **第二个坑:Keychain**。沙盒下 `flutter_secure_storage` 访问钥匙串
+  报 `-34018 errSecMissingEntitlement`。两个 entitlements 文件都要加
+  `keychain-access-groups`(值 `$(AppIdentifierPrefix)<bundleid>`)。
 - 应用名:改 `macos/Runner/Configs/AppInfo.xcconfig` 的
   `PRODUCT_NAME`(决定 .app 名与菜单名)。
 - 本地运行:`flutter run -d macos`。分发给别人需 Apple Developer ID

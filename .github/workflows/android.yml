@@ -206,6 +206,9 @@ jobs:
               || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
             /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
               || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
+            /usr/libexec/PlistBuddy -c "Delete :keychain-access-groups" "$ENT" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Add :keychain-access-groups array" "$ENT"
+            /usr/libexec/PlistBuddy -c 'Add :keychain-access-groups:0 string $(AppIdentifierPrefix)com.baidongli.miniterminal' "$ENT"
           done
           sed -i '' 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \
             macos/Runner/Configs/AppInfo.xcconfig

@@ -31,6 +31,19 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — macOS Keychain entitlement (errSecMissingEntitlement)
+
+**Done:** After the FAB fix, saving a host on macOS threw
+`-34018 errSecMissingEntitlement` from flutter_secure_storage — the
+sandboxed app lacked keychain access. Added `keychain-access-groups`
+(`$(AppIdentifierPrefix)com.baidongli.miniterminal`) to both macOS
+entitlement files in setup_local.sh + CI.
+**Why:** macOS sandbox blocks keychain without this entitlement.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+STACK_NOTES_FLUTTER.md
+**Next:** User patches the existing macos entitlements (or re-runs
+setup_local.sh) and rebuilds; verify saving a host + connecting.
+
 ## 2026-05-22 — Fix duplicate FAB Hero tag crash (all platforms)
 
 **Done:** Running on macOS surfaced a real cross-platform bug:

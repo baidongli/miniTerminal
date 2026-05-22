@@ -62,6 +62,10 @@ if [ -d macos ]; then
       || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
     /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
       || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
+    # Keychain access for flutter_secure_storage (sandbox -> errSecMissingEntitlement -34018)
+    /usr/libexec/PlistBuddy -c "Delete :keychain-access-groups" "$ENT" 2>/dev/null
+    /usr/libexec/PlistBuddy -c "Add :keychain-access-groups array" "$ENT"
+    /usr/libexec/PlistBuddy -c 'Add :keychain-access-groups:0 string $(AppIdentifierPrefix)com.baidongli.miniterminal' "$ENT"
     echo "   entitlements set in $ENT"
   done
   perl -pi -e 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \

@@ -29,3 +29,10 @@ android/key.properties
 
 # macOS
 .DS_Store
+
+# Generated platform scaffolding (created by tool/setup_local.sh / CI; not committed)
+/android/
+/ios/
+/macos/
+/.metadata
+/test/

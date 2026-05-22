@@ -199,16 +199,12 @@ jobs:
           flutter create --org ${{ env.APP_ORG }}
           --project-name miniterminal --platforms=macos .
 
-      - name: Configure macOS (sandbox network entitlements + app name)
+      - name: Configure macOS (disable sandbox for local/Developer-ID; app name)
         run: |
           for ENT in macos/Runner/DebugProfile.entitlements macos/Runner/Release.entitlements; do
-            /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.client bool true" "$ENT" 2>/dev/null \
-              || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
-            /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
-              || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
+            /usr/libexec/PlistBuddy -c "Set :com.apple.security.app-sandbox false" "$ENT" 2>/dev/null \
+              || /usr/libexec/PlistBuddy -c "Add :com.apple.security.app-sandbox bool false" "$ENT"
             /usr/libexec/PlistBuddy -c "Delete :keychain-access-groups" "$ENT" 2>/dev/null || true
-            /usr/libexec/PlistBuddy -c "Add :keychain-access-groups array" "$ENT"
-            /usr/libexec/PlistBuddy -c 'Add :keychain-access-groups:0 string $(AppIdentifierPrefix)com.baidongli.miniterminal' "$ENT"
           done
           sed -i '' 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \
             macos/Runner/Configs/AppInfo.xcconfig

@@ -67,14 +67,17 @@
 - 加平台:`flutter create --platforms=...,macos`。所有依赖
   (dartssh2/xterm/secure_storage/local_auth/file_selector/path_provider)
   都支持 macOS。
-- **关键坑(等价于安卓 INTERNET)**:macOS App 默认沙盒**禁止对外
-  网络**。SSH 必须在 **两个** entitlements 文件
-  (`macos/Runner/DebugProfile.entitlements` 和 `Release.entitlements`)
-  都加 `com.apple.security.network.client`;端口转发(本地监听)还需
-  `com.apple.security.network.server`。否则连接静默失败。
-- **第二个坑:Keychain**。沙盒下 `flutter_secure_storage` 访问钥匙串
-  报 `-34018 errSecMissingEntitlement`。两个 entitlements 文件都要加
-  `keychain-access-groups`(值 `$(AppIdentifierPrefix)<bundleid>`)。
+- **沙盒坑(网络 + 钥匙串)**:macOS App 默认沙盒禁止对外网络,
+  且 `flutter_secure_storage` 访问钥匙串报 `-34018
+  errSecMissingEntitlement`。沙盒下需要 `network.client`/`.server`
+  和 `keychain-access-groups` 等 entitlement——但 **ad-hoc 本地签名
+  (无 Team)授不了 `keychain-access-groups` 这种受限 entitlement**,
+  仍 -34018。
+- **本项目的解法:关闭沙盒**(两个 entitlements 文件
+  `com.apple.security.app-sandbox = false`)。非沙盒下网络/钥匙串
+  直接可用,适合本地调试 + Developer ID(店外)分发。
+  **代价:不能上 Mac App Store**(那要求沙盒)。要上架时再开沙盒 +
+  配开发者 Team 让受限 entitlement 生效。
 - 应用名:改 `macos/Runner/Configs/AppInfo.xcconfig` 的
   `PRODUCT_NAME`(决定 .app 名与菜单名)。
 - 本地运行:`flutter run -d macos`。分发给别人需 Apple Developer ID

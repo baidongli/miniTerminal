@@ -31,6 +31,19 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — macOS: disable sandbox (ad-hoc can't grant keychain)
+
+**Done:** keychain-access-groups still gave -34018 because ad-hoc local
+signing (no Team) can't grant restricted entitlements. Switched the
+macOS build to **disable app-sandbox** (both entitlement files) — under
+no sandbox, Keychain + SSH networking work without restricted
+entitlements. Trade-off documented: not Mac App Store eligible until
+sandbox re-enabled + proper Team signing. setup_local.sh + CI updated.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+STACK_NOTES_FLUTTER.md
+**Next:** User flips sandbox off on existing macos files (or re-runs
+setup_local.sh), flutter clean + run; verify save host + connect.
+
 ## 2026-05-22 — macOS Keychain entitlement (errSecMissingEntitlement)
 
 **Done:** After the FAB fix, saving a host on macOS threw

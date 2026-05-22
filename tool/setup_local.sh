@@ -55,18 +55,17 @@ if [ -f "$PLIST" ]; then
     || pb "Add :NSLocalNetworkUsageDescription string MiniTerminal uses the local network to reach SSH servers on your network."
 fi
 
-echo "==> Configuring macOS (sandbox network entitlements + app name)"
+echo "==> Configuring macOS (disable sandbox for local/Developer-ID; app name)"
+# App sandbox is disabled so flutter_secure_storage (Keychain) and SSH
+# networking work under ad-hoc local signing without restricted
+# entitlements (-34018). Trade-off: not Mac App Store eligible — re-enable
+# sandbox + proper signing/Team when targeting the Mac App Store.
 if [ -d macos ]; then
   for ENT in macos/Runner/DebugProfile.entitlements macos/Runner/Release.entitlements; do
-    /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.client bool true" "$ENT" 2>/dev/null \
-      || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
-    /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
-      || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
-    # Keychain access for flutter_secure_storage (sandbox -> errSecMissingEntitlement -34018)
-    /usr/libexec/PlistBuddy -c "Delete :keychain-access-groups" "$ENT" 2>/dev/null
-    /usr/libexec/PlistBuddy -c "Add :keychain-access-groups array" "$ENT"
-    /usr/libexec/PlistBuddy -c 'Add :keychain-access-groups:0 string $(AppIdentifierPrefix)com.baidongli.miniterminal' "$ENT"
-    echo "   entitlements set in $ENT"
+    /usr/libexec/PlistBuddy -c "Set :com.apple.security.app-sandbox false" "$ENT" 2>/dev/null \
+      || /usr/libexec/PlistBuddy -c "Add :com.apple.security.app-sandbox bool false" "$ENT"
+    /usr/libexec/PlistBuddy -c "Delete :keychain-access-groups" "$ENT" 2>/dev/null || true
+    echo "   sandbox disabled in $ENT"
   done
   perl -pi -e 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \
     macos/Runner/Configs/AppInfo.xcconfig

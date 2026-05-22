@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Add PRIVACY_POLICY.md
+
+**Done:** Drafted a privacy policy matching the app's actual behavior
+(no accounts, no backend, no analytics/ads, credentials only in the OS
+keychain, connections go straight to user's servers). Provides a URL
+for App Store / Play (GitHub blob URL works, or enable Pages).
+**Why:** Stores require a privacy policy URL at submission.
+**Files:** PRIVACY_POLICY.md
+**Next:** Host it (use the GitHub URL) and paste it in App Store
+Connect / Play Console. Change the contact email if preferred.
+
 ## 2026-05-22 — App Store prep: review keys, scrub competitor name, pro About
 
 **Done:** (1) Added App Store review Info.plist keys via PlistBuddy in

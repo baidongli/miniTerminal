@@ -62,6 +62,22 @@
 - 瞬时网络抖动（`Could not resolve ... aaptcompiler` /
   `handshake`）Gradle 会自动 retry，多数能自恢复，别误判为终错。
 
+## macOS 桌面版
+
+- 加平台:`flutter create --platforms=...,macos`。所有依赖
+  (dartssh2/xterm/secure_storage/local_auth/file_selector/path_provider)
+  都支持 macOS。
+- **关键坑(等价于安卓 INTERNET)**:macOS App 默认沙盒**禁止对外
+  网络**。SSH 必须在 **两个** entitlements 文件
+  (`macos/Runner/DebugProfile.entitlements` 和 `Release.entitlements`)
+  都加 `com.apple.security.network.client`;端口转发(本地监听)还需
+  `com.apple.security.network.server`。否则连接静默失败。
+- 应用名:改 `macos/Runner/Configs/AppInfo.xcconfig` 的
+  `PRODUCT_NAME`(决定 .app 名与菜单名)。
+- 本地运行:`flutter run -d macos`。分发给别人需 Apple Developer ID
+  签名 + 公证($99),否则 Gatekeeper 拦截(本机自用无所谓)。
+- 已加进 setup_local.sh + CI(CI 产出 `MiniTerminal-macos.zip` 工件)。
+
 ## 依赖体积：file_picker 很重
 
 - `file_picker` 在 iOS 拉了一整套图库依赖（DKImagePickerController →

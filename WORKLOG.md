@@ -31,6 +31,23 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Add macOS desktop target
+
+**Done:** Enabled macOS. setup_local.sh now creates the macos platform
+and patches the critical sandbox network entitlements
+(`com.apple.security.network.client` + `.server` in both DebugProfile
+and Release entitlements — without these, sandboxed SSH connections
+fail silently, the macOS analog of the Android INTERNET permission),
+plus sets PRODUCT_NAME to MiniTerminal. Added a CI `macos` job
+(continue-on-error) that builds the release .app and uploads
+`MiniTerminal-macos.zip` as an artifact. All plugins support macOS;
+no app code changes.
+**Why:** User wants a Mac version.
+**Files:** tool/setup_local.sh, .github/workflows/android.yml,
+STACK_NOTES_FLUTTER.md
+**Next:** User: re-run setup_local.sh then `flutter run -d macos`.
+Distribution to others needs Developer ID signing + notarization ($99).
+
 ## 2026-05-22 — Add SUBMISSION_CHECKLIST.md
 
 **Done:** Wrote an end-to-end store submission checklist tying together

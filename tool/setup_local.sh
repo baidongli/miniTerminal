@@ -17,9 +17,9 @@ flutter config --no-enable-swift-package-manager >/dev/null || true
 echo "==> Clean-regenerating android/ ios/ (they are generated, not"
 echo "    committed; flutter create does NOT overwrite existing files,"
 echo "    so we wipe first to match CI's fresh checkout exactly)"
-rm -rf android ios
+rm -rf android ios macos
 flutter create --org "$ORG" --project-name miniterminal \
-  --platforms=android,ios .
+  --platforms=android,ios,macos .
 
 echo "==> Patching MainActivity -> FlutterFragmentActivity (local_auth)"
 find android/app/src/main -name 'MainActivity.kt' -print0 |
@@ -53,6 +53,19 @@ if [ -f "$PLIST" ]; then
     || pb "Add :NSFaceIDUsageDescription string Unlock MiniTerminal with Face ID."
   pb "Set :NSLocalNetworkUsageDescription MiniTerminal uses the local network to reach SSH servers on your network." \
     || pb "Add :NSLocalNetworkUsageDescription string MiniTerminal uses the local network to reach SSH servers on your network."
+fi
+
+echo "==> Configuring macOS (sandbox network entitlements + app name)"
+if [ -d macos ]; then
+  for ENT in macos/Runner/DebugProfile.entitlements macos/Runner/Release.entitlements; do
+    /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.client bool true" "$ENT" 2>/dev/null \
+      || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
+    /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
+      || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
+    echo "   entitlements set in $ENT"
+  done
+  perl -pi -e 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \
+    macos/Runner/Configs/AppInfo.xcconfig
 fi
 
 GR=android/app/build.gradle.kts

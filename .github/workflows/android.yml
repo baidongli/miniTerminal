@@ -179,3 +179,55 @@ jobs:
         run: >
           flutter build ios --release --no-codesign
           --build-number=${{ github.run_number }}
+
+  macos:
+    name: Build macOS app
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate macOS scaffolding (real bundle id)
+        run: >
+          flutter create --org ${{ env.APP_ORG }}
+          --project-name miniterminal --platforms=macos .
+
+      - name: Configure macOS (sandbox network entitlements + app name)
+        run: |
+          for ENT in macos/Runner/DebugProfile.entitlements macos/Runner/Release.entitlements; do
+            /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.client bool true" "$ENT" 2>/dev/null \
+              || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.client true" "$ENT"
+            /usr/libexec/PlistBuddy -c "Add :com.apple.security.network.server bool true" "$ENT" 2>/dev/null \
+              || /usr/libexec/PlistBuddy -c "Set :com.apple.security.network.server true" "$ENT"
+          done
+          sed -i '' 's/PRODUCT_NAME = miniterminal/PRODUCT_NAME = MiniTerminal/' \
+            macos/Runner/Configs/AppInfo.xcconfig
+
+      - name: Disable Swift Package Manager (CocoaPods only)
+        run: flutter config --no-enable-swift-package-manager
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build macOS (release, ad-hoc signed)
+        run: flutter build macos --release --build-number=${{ github.run_number }}
+
+      - name: Package .app
+        run: |
+          mkdir -p dist
+          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
+          ditto -c -k --keepParent "$APP" dist/MiniTerminal-macos.zip
+
+      - name: Upload macOS app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: miniterminal-macos
+          path: dist/MiniTerminal-macos.zip
+          if-no-files-found: error

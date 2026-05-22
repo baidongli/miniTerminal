@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Collapsible desktop sidebar
+
+**Done:** Added a sidebar toggle to the desktop shell. A persistent
+button in the right-side top bar (always present, even with no open
+session) hides/shows the left hosts/sessions sidebar
+(`_sidebarVisible`). Refactored the tab strip into `_topBar` (toggle +
+tabs) + `_tabs`.
+**Why:** User asked for a collapse/expand control for the sidebar.
+**Files:** lib/screens/desktop/desktop_shell.dart
+**Next:** Pull + hot-restart on macOS; verify toggle.
+
 ## 2026-05-22 — Desktop master-detail layout (responsive)
 
 **Done:** Added a wide-screen desktop UI. Extracted the terminal render

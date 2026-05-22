@@ -28,6 +28,7 @@ class _DesktopShellState extends State<DesktopShell> {
   String _query = '';
   String? _selectedId;
   bool _loading = true;
+  bool _sidebarVisible = true;
 
   @override
   void initState() {
@@ -92,8 +93,10 @@ class _DesktopShellState extends State<DesktopShell> {
     return Scaffold(
       body: Row(
         children: [
-          SizedBox(width: 280, child: _sidebar(manager)),
-          const VerticalDivider(width: 1),
+          if (_sidebarVisible) ...[
+            SizedBox(width: 280, child: _sidebar(manager)),
+            const VerticalDivider(width: 1),
+          ],
           Expanded(child: _sessionArea(manager, selected)),
         ],
       ),
@@ -232,34 +235,53 @@ class _DesktopShellState extends State<DesktopShell> {
   }
 
   Widget _sessionArea(SessionManager manager, TerminalSession? selected) {
-    if (selected == null) {
-      return const Center(
-        child: Text('Select a host on the left to connect.'),
-      );
-    }
     return Column(
       children: [
-        _tabStrip(manager, selected),
-        _actionBar(manager, selected),
+        _topBar(manager, selected),
         const Divider(height: 1),
-        Expanded(
-          child: TerminalPane(
-            key: ValueKey(selected.id),
-            session: selected,
+        if (selected == null)
+          const Expanded(
+            child: Center(
+              child: Text('Select a host on the left to connect.'),
+            ),
+          )
+        else ...[
+          _actionBar(manager, selected),
+          const Divider(height: 1),
+          Expanded(
+            child: TerminalPane(
+              key: ValueKey(selected.id),
+              session: selected,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
 
-  Widget _tabStrip(SessionManager manager, TerminalSession selected) {
+  Widget _topBar(SessionManager manager, TerminalSession? selected) {
     return Container(
       height: 40,
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: manager.sessions.map((s) {
-          final active = s.id == selected.id;
+      child: Row(
+        children: [
+          IconButton(
+            tooltip: _sidebarVisible ? 'Hide sidebar' : 'Show sidebar',
+            icon: Icon(_sidebarVisible ? Icons.menu_open : Icons.menu),
+            onPressed: () =>
+                setState(() => _sidebarVisible = !_sidebarVisible),
+          ),
+          Expanded(child: _tabs(manager, selected)),
+        ],
+      ),
+    );
+  }
+
+  Widget _tabs(SessionManager manager, TerminalSession? selected) {
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: manager.sessions.map((s) {
+        final active = selected != null && s.id == selected.id;
           return InkWell(
             onTap: () => setState(() => _selectedId = s.id),
             child: Container(
@@ -293,7 +315,6 @@ class _DesktopShellState extends State<DesktopShell> {
             ),
           );
         }).toList(),
-      ),
     );
   }
 

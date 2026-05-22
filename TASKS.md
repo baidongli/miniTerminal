@@ -1,7 +1,8 @@
 # Feature Development List / Roadmap
 
-A free Termius alternative. This is the master feature list, ordered by
-version and priority. Each item has a short acceptance criterion so a
+A free, open-source mobile SSH client. This is the master feature list,
+ordered by version and priority. Each item has a short acceptance
+criterion so a
 future session knows when it's "done".
 
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done ·
@@ -74,7 +75,7 @@ is flagged, connections can route through a bastion.
 - [ ] Landscape / tablet layout
 - [ ] Per-session paste, "send line", clear
 
-**Done when:** terminal look & input feel comparable to Termius free.
+**Done when:** terminal look & input feel polished and comfortable.
 
 ---
 
@@ -113,7 +114,7 @@ list scales to dozens of entries.
 - [ ] Session logging to a file
 - [ ] Import hosts from `~/.ssh/config` / JSON; export hosts
 
-**Done when:** common Termius "pro" workflows are covered.
+**Done when:** common power-user SSH workflows are covered.
 
 ---
 

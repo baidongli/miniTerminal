@@ -8,6 +8,7 @@ import '../models/app_settings.dart';
 import '../models/ssh_host.dart';
 import '../services/app_lock.dart';
 import '../state/app_repository.dart';
+import 'about_screen.dart';
 import 'groups_screen.dart';
 import 'known_hosts_screen.dart';
 
@@ -144,9 +145,13 @@ class SettingsScreen extends StatelessWidget {
             onTap: importHosts,
           ),
           const _SectionHeader('About'),
-          const ListTile(
-            title: Text('MiniTerminal'),
-            subtitle: Text('A free, open SSH client. Built with Flutter.'),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('About MiniTerminal'),
+            subtitle: const Text('A fast, secure SSH client'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const AboutScreen())),
           ),
         ],
       ),

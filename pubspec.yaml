@@ -1,5 +1,5 @@
 name: miniterminal
-description: A lightweight SSH terminal client for iOS/Android (a free Termius alternative).
+description: A fast, secure SSH client for iOS and Android — host management, key auth, SFTP, port forwarding, and a full terminal.
 publish_to: "none"
 version: 0.9.1+10
 

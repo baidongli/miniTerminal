@@ -1,10 +1,9 @@
 # MiniTerminal
 
-A lightweight, free SSH terminal client for iPhone/Android — a no-cost
-alternative to Termius. Built with Flutter.
-
-**v0.1 scope:** host management (add / edit / delete) + SSH connection with
-password auth and an interactive terminal.
+A fast, secure, open-source SSH client for iPhone and Android, built
+with Flutter. Manage servers, connect over SSH (password or key), run a
+full interactive terminal, browse files over SFTP, and forward ports —
+all from your phone. Credentials never leave your device.
 
 ## Features
 

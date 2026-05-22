@@ -5,9 +5,9 @@
 
 ## What this project is
 
-A free, open SSH terminal client for iPhone/Android — a no-cost
-alternative to Termius. Built with **Flutter** (pure-Dart SSH via
-`dartssh2`, terminal rendering via `xterm`).
+A free, open-source SSH client for iPhone/Android. Built with
+**Flutter** (pure-Dart SSH via `dartssh2`, terminal rendering via
+`xterm`).
 
 ## Where to look (read in this order)
 

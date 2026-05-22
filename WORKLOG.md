@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Add SUBMISSION_CHECKLIST.md
+
+**Done:** Wrote an end-to-end store submission checklist tying together
+listing copy, privacy policy, signing/secrets, and the per-store steps
+(Play: account → AAB → tracks → 14-day closed test; App Store: enroll →
+create app → TestFlight → review). Linked from CLAUDE.md. Includes a
+"field → source" lookup table.
+**Why:** User wants a single follow-along guide for publishing.
+**Files:** SUBMISSION_CHECKLIST.md, CLAUDE.md
+**Next:** User executes it once accounts are verified.
+
 ## 2026-05-22 — Chinese privacy policy + store listing copy
 
 **Done:** Added `PRIVACY_POLICY_zh.md` (Chinese mirror of the policy)

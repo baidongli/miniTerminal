@@ -23,6 +23,8 @@ A free, open-source SSH client for iPhone/Android. Built with
    + fixes from this project. Read alongside the playbook for Flutter.
 7. **STORE_RELEASE.md** — Google Play / App Store publishing steps,
    required keystore + GitHub Secrets, iOS-pending-account status.
+8. **SUBMISSION_CHECKLIST.md** — step-by-step store submission flow;
+   **STORE_LISTING.md** (marketing copy) + PRIVACY_POLICY[_zh].md.
 
 ## Working agreement
 

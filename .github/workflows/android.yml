@@ -56,7 +56,8 @@ jobs:
           GR=android/app/build.gradle.kts
           if [ -f "$GR" ]; then
             sed -i '/^[[:space:]]*ndkVersion[[:space:]]*=/d' "$GR"
-            echo "Stripped forced ndkVersion (no native code)."
+            sed -i 's/minSdk = flutter.minSdkVersion/minSdk = 23/' "$GR"
+            echo "Stripped forced ndkVersion; set minSdk=23."
           fi
           python3 tool/patch_android_compilesdk.py
 

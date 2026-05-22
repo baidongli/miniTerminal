@@ -31,6 +31,21 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Upgrade flutter_secure_storage to 10.x (for keychain opt)
+
+**Done:** `usesDataProtectionKeychain` doesn't exist in 9.2.4 (build
+error); it's a 10.x option. Bumped flutter_secure_storage to ^10.0.0.
+Its only impactful requirement is Android minSdk≥23 (was 19) — added a
+`minSdk = 23` patch to setup_local.sh + CI (compileSdk 36/Java 17
+already met). The MacOsOptions(usesDataProtectionKeychain:false) code is
+valid in 10.x.
+**Why:** Need the legacy-keychain option to fix macOS -34018 without a
+signing Team, while staying fully scripted.
+**Files:** pubspec.yaml, tool/setup_local.sh,
+.github/workflows/android.yml, STACK_NOTES_FLUTTER.md
+**Next:** macOS: git pull → flutter pub get → flutter run -d macos.
+Watch Android CI rebuild with 10.x + minSdk 23.
+
 ## 2026-05-22 — macOS: use legacy keychain (real -34018 root cause)
 
 **Done:** -34018 persisted even with sandbox off. Real cause:

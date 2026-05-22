@@ -72,10 +72,11 @@ if [ -d macos ]; then
 fi
 
 GR=android/app/build.gradle.kts
-echo "==> Removing forced NDK (app has no native code; avoids NDK download)"
+echo "==> Removing forced NDK + raising minSdk to 23 (flutter_secure_storage 10)"
 if [ -f "$GR" ]; then
   perl -ni -e 'print unless /^\s*ndkVersion\s*=/' "$GR"
-  echo "   stripped ndkVersion from $GR"
+  perl -pi -e 's/minSdk = flutter\.minSdkVersion/minSdk = 23/' "$GR"
+  echo "   stripped ndkVersion, set minSdk=23 in $GR"
 fi
 
 echo "==> Forcing compileSdk 36 for all Android modules"

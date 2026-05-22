@@ -78,6 +78,9 @@
   也没用,仍 -34018。**解法:`FlutterSecureStorage(mOptions:
   MacOsOptions(usesDataProtectionKeychain: false))`** 改用传统钥匙串,
   无需 Team/entitlement。该选项只影响 macOS,iOS/Android 忽略。
+- **注意 `usesDataProtectionKeychain` 是 flutter_secure_storage
+  10.x 才有的**,9.x 没有此参数。升 10.x 需 Android minSdk≥23
+  (本项目已 patch minSdk=23);compileSdk 36 / Java 17 已满足。
 - 配合**关闭沙盒**(两个 entitlements `app-sandbox = false`),本地
   网络 + 钥匙串就都通了,适合本地 + Developer ID(店外)分发。
   **代价:不能上 Mac App Store**(要求沙盒);上架时再开沙盒 + 配

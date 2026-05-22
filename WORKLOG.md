@@ -31,6 +31,17 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Chinese privacy policy + store listing copy
+
+**Done:** Added `PRIVACY_POLICY_zh.md` (Chinese mirror of the policy)
+and `STORE_LISTING.md` (App Store + Google Play marketing copy, EN +
+中文: name, subtitle, keywords, description; no competitor names).
+**Why:** User wants a Chinese policy and ready store copy for
+submission.
+**Files:** PRIVACY_POLICY_zh.md, STORE_LISTING.md
+**Next:** Paste copy into App Store Connect / Play Console; capture
+screenshots; provide demo SSH host in review notes.
+
 ## 2026-05-22 — Add PRIVACY_POLICY.md
 
 **Done:** Drafted a privacy policy matching the app's actual behavior

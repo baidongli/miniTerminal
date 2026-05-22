@@ -31,6 +31,27 @@ STORE_RELEASE.md, CLAUDE.md
 **Next:** User creates upload keystore + adds 4 GitHub Secrets → CI
 emits Play-ready AAB; later, Apple account → wire iOS signing/upload.
 
+## 2026-05-22 — Desktop master-detail layout (responsive)
+
+**Done:** Added a wide-screen desktop UI. Extracted the terminal render
+into a reusable `TerminalPane` (lib/widgets). New `DesktopShell`
+(lib/screens/desktop): left sidebar (host search/list, active sessions,
+footer buttons to Keys/Snippets/Groups/Settings, add-host) + right area
+with a session tab strip, action bar (snippets/reconnect/SFTP/forward),
+and the terminal. `HomeScreen` is now a LayoutBuilder: ≥900px →
+DesktopShell, else the existing `MobileShell` (bottom nav). mobile
+TerminalScreen refactored to use TerminalPane; snippet picker extracted
+to a shared `pickSnippet`. Benefits macOS/iPad/web too; phones
+unchanged.
+**Why:** User wanted a real desktop layout, not the phone layout in a
+window.
+**Files:** lib/widgets/terminal_pane.dart,
+lib/screens/desktop/desktop_shell.dart, lib/screens/home_screen.dart,
+lib/screens/terminal_screen.dart
+**Next:** User hot-restart (R) / re-run -d macos; verify sidebar +
+tabs + connect. Possible follow-ups: drag-resize sidebar, per-tab
+state, keyboard shortcuts.
+
 ## 2026-05-22 — Upgrade flutter_secure_storage to 10.x (for keychain opt)
 
 **Done:** `usesDataProtectionKeychain` doesn't exist in 9.2.4 (build

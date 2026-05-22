@@ -13,6 +13,13 @@ app lock, settings, import/export) is implemented, CI-green for Android
 Remaining work is polish and the known caveats below, not core
 functionality.
 
+### Responsive desktop layout (2026-05-22)
+`HomeScreen` switches by width: ≥900px shows a desktop master-detail
+shell (sidebar with hosts/sessions + right-side tabbed terminal,
+`lib/screens/desktop/desktop_shell.dart`); narrower keeps the mobile
+bottom-nav (`MobileShell`). Terminal rendering shared via
+`lib/widgets/terminal_pane.dart`. macOS runs the desktop layout.
+
 ### iOS device-verified (2026-05-22)
 The app now runs on a real iPhone (iPhone18,1, iOS 26.5) in release
 mode via a free Apple ID (7-day signing, team 35L8KT9ZS8). Getting

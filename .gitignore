@@ -36,3 +36,9 @@ android/key.properties
 /macos/
 /.metadata
 /test/
+
+# Signing material — NEVER commit
+upload-keystore.jks
+*.jks
+*.keystore
+key.properties
